@@ -60,6 +60,7 @@
         <finalName>cncounter-web</finalName>
 
         <resources>
+            <!-- 多套环境资源配置, 如 dev, beta, prod等-->
             <resource>
                 <directory>src/main/resources.${deploy.type}</directory>
             </resource>
@@ -280,6 +281,7 @@
     </dependencies>
 
     <profiles>
+        <!-- 多套环境资源配置, 如 dev, beta, prod等-->
         <profile>
             <id>dev</id>
             <activation>
