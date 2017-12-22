@@ -225,7 +225,7 @@
                     all = p.getElementsByTagName('i');
 
             while (
-                    p.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
+                    p.innerHTML = '<!--[if gte IE ' + (++v) + ']><i></i><![endif]-->',
                             all[0]);
 
             return v > 4 ? v : 0;
