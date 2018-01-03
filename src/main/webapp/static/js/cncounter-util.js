@@ -1,4 +1,5 @@
-var CNC = CNC || function(){};
+/**/
+;window.CNC = window.CNC || function(){};
 
 ;(function(){
     //
