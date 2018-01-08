@@ -32,7 +32,7 @@
         <pagehelper.version>3.6.4</pagehelper.version>
         <mybatis-spring.version>1.2.2</mybatis-spring.version>
         <mysql.jdbc.version>5.1.30</mysql.jdbc.version>
-        <druid.version>1.0.31</druid.version>
+        <druid.version>1.1.6</druid.version>
         <fastjson.version>1.1.34</fastjson.version>
         <jackson.databind.version>2.2.2</jackson.databind.version>
         <org.aspectj.version>1.8.4</org.aspectj.version>
@@ -58,6 +58,16 @@
 
     <build>
         <finalName>cncounter-web</finalName>
+
+        <resources>
+            <!-- 多套环境资源配置, 如 dev, beta, prod等-->
+            <resource>
+                <directory>src/main/resources.${deploy.type}</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <!-- Maven 编译插件 -->
             <plugin>
@@ -195,13 +205,13 @@
             <version>3.1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.qq</groupId>
-            <artifactId>connect</artifactId>
-            <version>2.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/connect-2.0.jar</systemPath>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.qq</groupId>-->
+            <!--<artifactId>connect</artifactId>-->
+            <!--<version>2.0</version>-->
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/connect-2.0.jar</systemPath>-->
+        <!--</dependency>-->
 
         <!-- Http Client -->
         <dependency>
@@ -269,4 +279,32 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <!-- 多套环境资源配置, 如 dev, beta, prod等-->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profiles.active>dev</profiles.active>
+                <deploy.type>dev</deploy.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>beta</id>
+            <properties>
+                <profiles.active>beta</profiles.active>
+                <deploy.type>beta</deploy.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+                <deploy.type>prod</deploy.type>
+            </properties>
+        </profile>
+    </profiles>
 </project>
