@@ -2,6 +2,7 @@ package com.cncounter.cncounter.mvc.controller.tools;
 
 import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
 import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.util.common.Config;
 import com.cncounter.util.net.HttpClientUtils;
 import com.cncounter.util.string.StringNumberUtil;
 import org.apache.commons.io.IOUtils;
@@ -41,8 +42,8 @@ import java.util.*;
 public class CrossOrigionProxyController extends ControllerBase {
 
     //
-    final String downloadPrefix = "http://download.cncounter.com/temp/";
-    final String targetDirectoryStr = "/usr/local/download/temp/";
+    final String downloadUrlPrefix = Config.sysconfig.get("sys.download.downloadUrlPrefix");
+    final String targetDirectoryPath = Config.sysconfig.get("sys.download.targetDirectoryPath");
     //
 	/**
 	 * JSON跨域代理. 要求信息是 _tourl
@@ -103,7 +104,7 @@ public class CrossOrigionProxyController extends ControllerBase {
             // 暂时不管
             return JSONMessage.failureMessage().setInfo("不支持 jsp 文件下载");
         }
-        File targetDirectory = new File(targetDirectoryStr);
+        File targetDirectory = new File(targetDirectoryPath);
         if(!targetDirectory.exists()){
             return JSONMessage.failureMessage().setInfo("不存在");
         }
@@ -114,7 +115,7 @@ public class CrossOrigionProxyController extends ControllerBase {
             // 返回
             return JSONMessage.successMessage().setInfo("文件已存在")
                     .addMeta("targetfilename", targetfilename)
-                    .addMeta("downloadurl",downloadPrefix + targetfilename)
+                    .addMeta("downloadurl",downloadUrlPrefix + targetfilename)
                     ;
         }
         //
@@ -126,7 +127,7 @@ public class CrossOrigionProxyController extends ControllerBase {
         Map<String, String> paramMap =parseParamMap(request);
         //
         String origfileurl = paramMap.get("origfileurl");
-        logger.debug("origfileurl:\n"+origfileurl);
+        logger.debug("origfileurl: "+origfileurl);
         if(StringNumberUtil.isEmpty(origfileurl)){
             return JSONMessage.failureMessage().setInfo("origfileurl为空");
         } else if(false == origfileurl.startsWith("http")){
@@ -155,7 +156,7 @@ public class CrossOrigionProxyController extends ControllerBase {
             // 暂时不管
             return JSONMessage.failureMessage().setInfo("不支持目录下载");
         }
-        File targetDirectory = new File(targetDirectoryStr);
+        File targetDirectory = new File(targetDirectoryPath);
         if(!targetDirectory.exists()){
             targetDirectory.mkdirs();
         }
@@ -166,7 +167,7 @@ public class CrossOrigionProxyController extends ControllerBase {
             // 直接返回
             return JSONMessage.successMessage().setInfo("文件已存在")
                     .addMeta("targetfilename", targetfilename)
-                    .addMeta("downloadurl",downloadPrefix + targetfilename)
+                    .addMeta("downloadurl",downloadUrlPrefix + targetfilename)
                     ;
         }
         //
@@ -207,7 +208,7 @@ public class CrossOrigionProxyController extends ControllerBase {
         });
         //
         return JSONMessage.successMessage().setInfo("文件正在下载")
-                .addMeta("downloadurl",downloadPrefix + targetfilename);
+                .addMeta("downloadurl",downloadUrlPrefix + targetfilename);
     }
 	
 	//
