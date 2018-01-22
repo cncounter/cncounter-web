@@ -84,7 +84,7 @@ public class DownloadController extends ControllerBase {
                     ;
         }
         //
-        return JSONMessage.failureMessage().setInfo("文件不存在");
+        return JSONMessage.failureMessage().addMeta("targetFile", targetFile.getAbsolutePath()).setInfo("文件不存在");
     }
 
     public Object _genFileUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
