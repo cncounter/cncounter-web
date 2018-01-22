@@ -14,7 +14,7 @@
 		<div class="content_left">
 			<p class="h1">代理VPN下载</p>
 			<div>
-				<form id="input_form" action="<%=basePath %>crossorigion/download/genfileurl.json" method="post">
+				<form id="input_form" action="<%=basePath %>download/genfileurl.json" method="post">
 					<span>请输入需要下载的URL地址:</span>
 					<br/>
 					<textarea class="break-all" tabindex="3" id="origfileurl" name="origfileurl" rows="4" cols="36"></textarea>
@@ -89,7 +89,12 @@
                         $file_download_anchor.attr("href", downloadurl);
                         $file_download_anchor.text(downloadurl);
                         // 循环探测. 是否已经成功
-                        // var testURL = "/crossorigion/download/existsfile.json";
+                        // var testURL = "/download/existsfile.json";
+                        //
+                    var delay = 2*1000;
+                        window.setTimeout(function(){
+                            detachFileExists(downloadurl, delay);
+                        }, delay);
                     };
 				//
 				var errorCallback = function (jqXHR, textStatus, errorThrown) {
@@ -100,6 +105,40 @@
 				postAjax(url, data, successCallback,errorCallback,1);
 				//
 			});
+            //
+            function detachFileExists(targetfilename, delay){
+                //
+                delay = delay || 2*1000;
+                var url = "/download/existsfile.json";
+                var data = {
+                    targetfilename : targetfilename
+                };
+
+                var successCallback = function (message) {
+                    var meta = message["meta"] || "";
+                    var info = message["info"] || "";
+                    var status = message["status"] || 0;
+                    if(status){
+                        layer.msg(info);
+                        var downloadurl = meta["downloadurl"];
+                        // 创建 iframe 下载文件?
+                        downloadurl && window.open(downloadurl, "_blank");
+                        //
+                        return;
+                    }
+                    // 循环探测. 是否已经成功
+                    window.setTimeout(function(){
+                        detachFileExists(targetfilename, delay);
+                    }, delay);
+                };
+                //
+                var errorCallback = function (jqXHR, textStatus, errorThrown) {
+                    // 把错误吃了
+                    layer.msg("网络请求失败");
+                };
+                //
+                postAjax(url, data, successCallback,errorCallback,1);
+            };
 		});
 	</script>
 </body>
