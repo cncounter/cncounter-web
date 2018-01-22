@@ -58,11 +58,11 @@ public class DownloadController extends ControllerBase {
                 if (null == path || path.trim().isEmpty()) {
                     return JSONMessage.failureMessage().setInfo("只支持 http 协议");
                 }
-                targetfilename = path.substring(path.lastIndexOf("/"));
+                targetfilename = path.substring(path.lastIndexOf("/")+1);
             }
         }
-        while (null != targetfilename && targetfilename.startsWith("/")) {
-            targetfilename = targetfilename.substring(1);
+        if (null != targetfilename && targetfilename.contains("/")) {
+            targetfilename = targetfilename.substring(targetfilename.lastIndexOf("/")+1);
         }
         //
         if (targetfilename.endsWith(".jsp")) {
@@ -109,8 +109,8 @@ public class DownloadController extends ControllerBase {
             }
             targetfilename = path.substring(path.lastIndexOf("/"));
         }
-        while (null != targetfilename && targetfilename.startsWith("/")) {
-            targetfilename = targetfilename.substring(1);
+        if (null != targetfilename && targetfilename.contains("/")) {
+            targetfilename = targetfilename.substring(targetfilename.lastIndexOf("/")+1);
         }
         //
         if (targetfilename.endsWith(".jsp")) {
