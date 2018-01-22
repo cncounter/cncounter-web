@@ -13,7 +13,7 @@
 		<div class="content_left">
 			<p class="h1">CN计数器</p>
 			<h2>
-				<a target="_blank" href="https://github.com/cncounter/cncounter">GitHub项目首页</a>
+				<a target="_blank" href="https://github.com/cncounter/cncounter-web">GitHub项目首页</a>
 			</h2>
             <h2>
                 <a target="_blank" href="https://github.com/cncounter/translation">CNCounter翻译文章</a>
