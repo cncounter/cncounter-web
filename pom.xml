@@ -48,6 +48,34 @@
         <jdk.version>1.6</jdk.version>
     </properties>
 
+    <profiles>
+        <!-- 多套环境资源配置, 如 dev, beta, prod等-->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profiles.active>dev</profiles.active>
+                <deploy.type>dev</deploy.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>beta</id>
+            <properties>
+                <profiles.active>beta</profiles.active>
+                <deploy.type>beta</deploy.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+                <deploy.type>prod</deploy.type>
+            </properties>
+        </profile>
+    </profiles>
+
     <!--<repositories>-->
         <!--<repository>-->
             <!--<id>local-file</id>-->
@@ -104,11 +132,6 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${org.aspectj.version}</version>
@@ -118,17 +141,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.databind.version}</version>
-        </dependency>
-        <!-- log4j2 -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
         </dependency>
         <!-- MySQL 的客户端驱动  -->
         <dependency>
@@ -141,12 +153,6 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>${mybatis.version}</version>
-        </dependency>
-        <!-- mybatis分页插件 -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>${pagehelper.version}</version>
         </dependency>
 
         <!-- mybatis 与 spring的桥接,好像Spring3.0需要,4.0推荐使用注解方式来集成, -->
@@ -202,16 +208,8 @@
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>3.1.0</version>
+            <version>3.3.1</version>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>com.qq</groupId>-->
-            <!--<artifactId>connect</artifactId>-->
-            <!--<version>2.0</version>-->
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/connect-2.0.jar</systemPath>-->
-        <!--</dependency>-->
 
         <!-- Http Client -->
         <dependency>
@@ -225,14 +223,12 @@
             <version>${httpclient.version}</version>
         </dependency>
 
-        <!-- QiNiu-yuncunchu -->
+        <!-- log4j2 -->
         <dependency>
-            <groupId>com.qiniu</groupId>
-            <artifactId>qiniu-java-sdk</artifactId>
-            <version>7.0.9</version>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
-
-
         <!-- slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -279,32 +275,4 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <!-- 多套环境资源配置, 如 dev, beta, prod等-->
-        <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <profiles.active>dev</profiles.active>
-                <deploy.type>dev</deploy.type>
-            </properties>
-        </profile>
-        <profile>
-            <id>beta</id>
-            <properties>
-                <profiles.active>beta</profiles.active>
-                <deploy.type>beta</deploy.type>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <profiles.active>prod</profiles.active>
-                <deploy.type>prod</deploy.type>
-            </properties>
-        </profile>
-    </profiles>
 </project>
