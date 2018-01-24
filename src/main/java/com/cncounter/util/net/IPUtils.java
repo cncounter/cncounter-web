@@ -36,6 +36,7 @@ public class IPUtils {
 
     /**
      * 获取客户端的IP地址
+     * 参考: https://stackoverflow.com/questions/16558869/getting-ip-address-of-client
      * @param request
      * @return
      */
