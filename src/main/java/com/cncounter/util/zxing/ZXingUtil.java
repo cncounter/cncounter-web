@@ -4,18 +4,20 @@ import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.multi.GenericMultipleBarcodeReader;
+import com.google.zxing.multi.MultipleBarcodeReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * 二维码图片包装工具<br/>
@@ -23,8 +25,10 @@ import java.util.Vector;
  */
 public class ZXingUtil {
 
-	/**
-	 * 生成二维码, 默认width = 400;height = 400;
+    private static Logger logger = LoggerFactory.getLogger(ZXingUtil.class);
+
+    /**
+     * 生成二维码, 默认width = 400;height = 400;
 	 * 
 	 * @param content
 	 *            需要生成的字符串内容
@@ -159,6 +163,7 @@ public class ZXingUtil {
 
 	/**
 	 * 解析二维码图片.
+     * 参考: https://github.com/zxing/zxing/blob/master/zxingorg/src/main/java/com/google/zxing/web/DecodeServlet.java#L359
 	 * @param image 缓冲图片
 	 * @return 二维码内容Text
 	 */
@@ -169,47 +174,94 @@ public class ZXingUtil {
 		if (null == image || image.getHeight() < 10 || image.getWidth() < 10) {
 			return code;
 		}
-		//
-		MultiFormatReader multiFormatReader = new MultiFormatReader();
-		//
-		// 解码的参数
-		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(
-				2);
-		// 可以解析的编码类型
-		Vector<BarcodeFormat> decodeFormats = new Vector<BarcodeFormat>();
-		if (decodeFormats == null || decodeFormats.isEmpty()) {
-			decodeFormats = new Vector<BarcodeFormat>();
+        //
+        Map<DecodeHintType,Object>  HINTS = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+        HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        HINTS.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
+        Map<DecodeHintType,Object> HINTS_PURE = new EnumMap<DecodeHintType,Object>(HINTS);
+        HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
 
-			// 这里设置可扫描的类型，我这里选择了都支持
-			decodeFormats.add(BarcodeFormat.CODABAR);
-			decodeFormats.add(BarcodeFormat.QR_CODE);
-			decodeFormats.add(BarcodeFormat.DATA_MATRIX);
-		}
-		hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+        LuminanceSource source = new BufferedImageLuminanceSource(image);
+        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+        Collection<Result> results = new ArrayList<Result>(1);
 
-		// 设置继续的字符编码格式为UTF8
-		hints.put(DecodeHintType.CHARACTER_SET, "UTF8"); // 注意: 不是 UTF-8
+        try {
+            Reader reader = new MultiFormatReader();
+            ReaderException savedException = null;
+            try {
+                // Look for multiple barcodes
+                MultipleBarcodeReader multiReader = new GenericMultipleBarcodeReader(reader);
+                Result[] theResults = multiReader.decodeMultiple(bitmap, HINTS);
+                if (theResults != null) {
+                    results.addAll(Arrays.asList(theResults));
+                }
+            } catch (ReaderException re) {
+                savedException = re;
+            }
 
-		// 设置解析配置参数
-		multiFormatReader.setHints(hints);
+            if (results.isEmpty()) {
+                try {
+                    // Look for pure barcode
+                    Result theResult = reader.decode(bitmap, HINTS_PURE);
+                    if (theResult != null) {
+                        results.add(theResult);
+                    }
+                } catch (ReaderException re) {
+                    savedException = re;
+                }
+            }
 
-		// 解析部分：
-		// 开始对图像资源解码
-		Result rawResult = null;
-		try {
-			// 
-			rawResult = multiFormatReader.decodeWithState(
-							new BinaryBitmap(
-									new HybridBinarizer(
-											new BufferedImageLuminanceSource(image)
-									)
-							)
-						);
-			//
-			code = rawResult.getText();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            if (results.isEmpty()) {
+                try {
+                    // Look for normal barcode in photo
+                    Result theResult = reader.decode(bitmap, HINTS);
+                    if (theResult != null) {
+                        results.add(theResult);
+                    }
+                } catch (ReaderException re) {
+                    savedException = re;
+                }
+            }
+
+            if (results.isEmpty()) {
+                try {
+                    // Try again with other binarizer
+                    BinaryBitmap hybridBitmap = new BinaryBitmap(new HybridBinarizer(source));
+                    Result theResult = reader.decode(hybridBitmap, HINTS);
+                    if (theResult != null) {
+                        results.add(theResult);
+                    }
+                } catch (ReaderException re) {
+                    savedException = re;
+                }
+            }
+
+            if (results.isEmpty()) {
+                try {
+                    throw savedException == null ? NotFoundException.getNotFoundInstance() : savedException;
+                } catch (FormatException e) {
+                    logger.info(e.toString());
+                } catch (ChecksumException e) {
+                    logger.info(e.toString());
+                } catch (ReaderException e) { // Including NotFoundException
+                    logger.info(e.toString());
+                }
+                return "";
+            }
+            // 结果
+            for(Result theResult: results){
+                if (theResult != null) {
+                    code = theResult.getText();
+                }
+                if(null != code && false==code.isEmpty()){
+                    return code;
+                }
+            }
+
+        } catch (RuntimeException re) {
+            // Call out unexpected errors in the logger clearly
+            logger.warn("Unexpected exception from library", re);
+        }
 		//
 		return code;
 	}
