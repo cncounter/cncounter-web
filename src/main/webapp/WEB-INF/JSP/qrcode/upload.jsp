@@ -18,7 +18,9 @@
 	<div class="container-fluid">
 		<div class="content_left">
 			<p class="h1">二维码图片在线识别  [<a target="_blank" href="input.php">在线生成</a>]</p>
-
+            <p>
+                也可以使用zxing官方解码: <a href="https://zxing.org/">https://zxing.org/</a>
+            </p>
 			<div>
                 <div>上传图片:
                     <span class="btn btn-success fileinput-button">

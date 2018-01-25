@@ -43,7 +43,7 @@
             %>
             <h1>
                 您的公网-IP地址为:
-                <a target="_blank" href="http://stackoverflow.com/questions/16558869/getting-ip-address-of-client">
+                <a target="_blank" href="https://github.com/cncounter/cncounter-web/blob/master/src/main/java/com/cncounter/util/net/IPUtils.java#L151">
                     <span class="remoteip"><%=clientIp %></span>
                 </a>
                 (

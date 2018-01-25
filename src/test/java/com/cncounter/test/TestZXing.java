@@ -1,14 +1,10 @@
 package com.cncounter.test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import com.cncounter.util.zxing.ZXingUtil;
+
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.cncounter.util.zxing.ZXingUtil;
 
 public class TestZXing {
 
@@ -46,9 +42,23 @@ public class TestZXing {
 			System.out.println("文件 "+ file.getAbsolutePath()+" 生成成功!");
 		}
 	}
+
+    public void testZxingParse() {
+        //
+        String pathname = "E:\\qr0.jpg";
+        File file = new File(pathname);
+        //
+        // 生成
+        String content = ZXingUtil.parseQrCode(file);
+
+        //
+        System.out.println("content= "+ content);
+
+    }
 	
 	public static void main(String[] args) {
-		new TestZXing().testZxing();
+		//new TestZXing().testZxing();
+		new TestZXing().testZxingParse();
 	}
 
 }
