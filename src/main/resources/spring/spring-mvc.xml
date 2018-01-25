@@ -18,8 +18,8 @@
 	</bean>
 	
 	<!-- Jackson转换器 -->
-	<bean id="mappingJacksonHttpMessageConverter"
-		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+	<!--<bean id="mappingJacksonHttpMessageConverter"-->
+		<!--class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />-->
 	<!-- enum枚举值的引用方法 -->
 	<bean id="DisableCircularReferenceDetect" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean" >
 		<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect"></property>
