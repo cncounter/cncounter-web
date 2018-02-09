@@ -1,8 +1,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8" isErrorPage="true" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 <%@ page import="java.util.concurrent.ConcurrentHashMap" %>
 <%@ page import="java.util.concurrent.atomic.AtomicInteger" %>
 <%@ page import="com.cncounter.util.net.IPUtils" %>
 <%@ page import="com.alibaba.fastjson.JSON" %>
+<%-- trimDirectiveWhitespaces 的作用是去除多余的空行 --%>
 <%!
     // 访问计数器Map<IP地址, 次数>
     private static ConcurrentHashMap<String, AtomicInteger> visitCounterMap
