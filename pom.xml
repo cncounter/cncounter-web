@@ -215,6 +215,11 @@
             <artifactId>javase</artifactId>
             <version>3.3.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.1</version>
+        </dependency>
 
         <!-- Http Client -->
         <dependency>
