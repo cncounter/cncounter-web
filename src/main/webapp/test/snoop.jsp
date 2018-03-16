@@ -18,7 +18,6 @@
 <BODY>
 
 <H1>WebApp JSP 监测页面</H1>
-<img src="images/jbosscorp_logo.png">
 
 <h2>JVM 内存信息监控(Memory Monitor)</h2>
  

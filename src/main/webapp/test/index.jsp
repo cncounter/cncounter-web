@@ -32,6 +32,9 @@
 			<h2>
 				<a target="_blank" href="./snoop.jsp">snoop,WebApp监测页面</a>
 			</h2>
+            <h2>
+                <a target="_blank" href="./System_getProperties.jsp">System_getProperties.jsp</a>
+            </h2>
 			<h2>
 				<a target="_blank" href="./to-markdown/index.html">to-markdown页面</a>
 			</h2>
@@ -49,15 +52,6 @@
 			</h2>
 			<h2>
 				<a target="_blank" href="http://www.renfufei.com/">就是那只守护的铁锚</a>
-			</h2>
-			<h2>
-				<a target="_blank" href="http://www.jiaojiaochisu.com/">娇娇吃素 敬请期待</a>
-			</h2>
-			<h2>
-				<a target="_blank" href="http://www.zhimengmeng.com/">织梦梦</a>
-			</h2>
-			<h2>
-				<a target="_blank" href="http://duoshuo.com/">多说 - 社会化评论系统</a>
 			</h2>
 			<h2>
 				<a target="_blank" href="https://docs.oracle.com/javase/jp/8/technotes/tools/unix/toc.html">JavaSE Tools Reference</a>
