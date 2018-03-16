@@ -56,11 +56,26 @@ public class TestJInfo {
     </tr>
 
     <%
+        //
+        Set<String> secretyKeys = new HashSet<>();
+        secretyKeys.add("com.sun.management.jmxremote.port");
+        secretyKeys.add("java.rmi.server.hostname");
+        //
         Properties properties = System.getProperties();
         //
         Set<Object> keySet = properties.keySet();
         for (Object key : keySet) {
             Object value = properties.get(key);
+
+            if(secretyKeys.contains(key)){
+                value = "******保密*****";
+            }
+            if(value != null){
+                String v = value.toString();
+                v = v.replace("\r", "\\r");
+                v = v.replace("\n", "\\n");
+                value = v;
+            }
     %>
     <tr>
         <td width="200">
