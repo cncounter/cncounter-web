@@ -19,6 +19,27 @@
 
 <H1>System.getProperties 监测页面</H1>
 
+<hr/>
+
+<h2>实现代码</h2>
+
+<textarea rows="14" cols="60">
+public class TestJInfo {
+    public static void main(String[] args) {
+        // 获取所有系统属性
+        Properties properties = System.getProperties();
+        // 遍历
+        Set keySet= properties.keySet();
+        for(Object key : keySet){
+            Object value = properties.get(key);
+            System.out.println(key+"="+value);
+        }
+    }
+}
+</textarea>
+
+<hr/>
+
 <h2>JVM 系统属性</h2>
 
 
