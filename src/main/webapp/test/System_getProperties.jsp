@@ -23,7 +23,7 @@
 
 <h2>实现代码</h2>
 
-<textarea rows="14" cols="60">
+<textarea rows="14" cols="60" readonly="readonly" style="background-color: #eeeeee;">
 public class TestJInfo {
     public static void main(String[] args) {
         // 获取所有系统属性
