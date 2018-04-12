@@ -36,10 +36,10 @@ public class TestSpringImageEmail {
         helper.setSubject("测试Spring发送内联图片-1"); // 标题
         helper.setText("测试图片: 海信电视" +
                 "<br/>" +
-                "<img src='cid:image1' />" +
+                "<a target='_blank' href='http://www.yuledanao.com/dl/haixin.png'><img src='cid:image1' /></a>" +
                 "<br/>" +
                 "<br/>" +
-                "请点击: <a href='http://www.yuledanao.com/dl/PWA_INTRO.zip'><b>PWA开发简介.zip</b></a>;" +
+                "请点击: <a target='_blank' href='http://www.yuledanao.com/dl/PWA_INTRO.zip'><b>PWA开发简介.zip</b></a>;" +
                 " 或者下载附件!", isHTML); // HTML-信息
 
         // 增加内联图片:
