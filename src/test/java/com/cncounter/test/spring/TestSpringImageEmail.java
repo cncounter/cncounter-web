@@ -33,15 +33,20 @@ public class TestSpringImageEmail {
         // 邮件信息
         helper.setFrom("100001@qq.com"); // 发件人邮箱
         helper.setTo("10086@cncounter.cn"); // 收件人邮箱
-        helper.setSubject("测试Spring发送内联图片-1"); // 标题
-        helper.setText("测试图片: 海信电视" +
+        helper.setSubject("测试Spring发送内联图片-3"); // 标题
+        helper.setText("<h1>测试图片</h1>" +
+                "海信电视-InLine:" +
                 "<br/>" +
                 "<a target='_blank' href='http://www.yuledanao.com/dl/haixin.png'><img src='cid:image1' /></a>" +
+                "<br/>" +
+                "img-src-http资源:" +
+                "<br/>" +
+                "<a target='_blank' href='http://www.yuledanao.com/dl/haixin.png'><img src='http://www.yuledanao.com/dl/haixin.png' /></a>" +
                 "<br/>" +
                 "<br/>" +
                 "请点击: <a target='_blank' href='http://www.yuledanao.com/dl/PWA_INTRO.zip'><b>PWA开发简介.zip</b></a>;" +
                 " 或者下载附件!", isHTML); // HTML-信息
-
+        // cid - content-ID
         // 增加内联图片:
         // 不作为附件发送
         String imageName1 = "E:/haixin.png";
