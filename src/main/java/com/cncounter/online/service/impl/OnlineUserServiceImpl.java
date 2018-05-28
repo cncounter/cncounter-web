@@ -7,7 +7,6 @@ import com.cncounter.online.vo.PagerVO;
 import com.cncounter.util.string.StringNumberUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.List;
 public class OnlineUserServiceImpl implements OnlineUserService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
+    //@Autowired
     private OnlineUserMapper onlineUserMapper;
 
     @Override
