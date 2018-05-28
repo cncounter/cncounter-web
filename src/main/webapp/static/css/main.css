@@ -7,7 +7,10 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   padding: 0;
   border: 0;
 }
-
+/*去除谷歌核心浏览器下输入框虚边和自动填充帐号密码时的黄色背景*/
+input,select,textarea,button{outline:none}
+input:-webkit-autofill,textarea:-webkit-autofill,select:-webkit-autofill {-webkit-box-shadow: 0 0 0 1000px white inset;}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {  -webkit-box-shadow: 0 0 0 1000px white inset;}
 /* BODY
 =============================================================================*/
 body {
