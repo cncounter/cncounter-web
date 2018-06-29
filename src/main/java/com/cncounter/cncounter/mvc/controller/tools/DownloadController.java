@@ -146,28 +146,28 @@ public class DownloadController extends ControllerBase {
             @Override
             public void run() {
                 //
+                String targetFullPath = targetFile.getAbsolutePath();
+                //
+                String TMP = ".tmp";
+                String tempFullPath = targetFullPath + TMP;
+                //
                 FileOutputStream outputStream = null;
                 try {
                     // 需要下载到temp,再 rename
                     //
-                    String targetFullPath = targetFile.getAbsolutePath();
-                    //
-                    String TMP = ".tmp";
-                    String tempFullPath = targetFullPath + TMP;
-                    //
                     outputStream = new FileOutputStream(tempFullPath);
                     IOUtils.copy(inputStream, outputStream);
-                    //
-                    File tempFile = new File(tempFullPath);
-                    if (tempFile.exists()) {
-                        tempFile.renameTo(targetFile);
-                    }
                     //
                 } catch (Throwable e) {
                     logger.error("下载文件失败.", e);
                 } finally {
                     IOUtils.closeQuietly(inputStream);
                     IOUtils.closeQuietly(outputStream);
+                }
+                // 关掉 outputStream 之后才能重命名- Linux 不报错可以改名称, Windows不行。
+                File tempFile = new File(tempFullPath);
+                if (tempFile.exists()) {
+                    tempFile.renameTo(targetFile);
                 }
             }
         });
