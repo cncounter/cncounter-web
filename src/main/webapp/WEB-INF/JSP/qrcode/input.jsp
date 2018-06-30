@@ -24,6 +24,8 @@
 					<textarea tabindex="3" id="content" name="content" rows="4" cols="36"></textarea>
 					<br/>
 				</form>
+                    <button tabindex="4" id="btn_demo_url"
+                        type="button" class="btn btn-primary"> 示　 例 </button>
 					<button tabindex="4" id="btn_generate_qrcode"
 						 type="button" class="btn btn-primary"> 生　 成 </button>
                 <a id="btn_redirect"  tabindex="5" style="margin-left: 10px;" class="btn btn-warning"> 点击跳转>> </a>
@@ -46,6 +48,7 @@
 		$(function(){
 			//
 			var $btn_generate_qrcode = $("#btn_generate_qrcode");
+			var $btn_demo_url = $("#btn_demo_url");
 			var $btn_redirect = $("#btn_redirect");
 			var $qrcode_img = $("#qrcode_img");
 			var $qrcode_img_anchor = $("#qrcode_img_anchor");
@@ -54,12 +57,22 @@
 			var $width = $("input[name=width]");
 			var $height = $("input[name=height]");
 			//
-			var href = window.location.href;
-			$content.val(href);
 			$content.bind("focus", function(e){
 				// 选中
 				$content[0] && $content[0].select && $content[0].select();
 			});
+            //
+            function initContentValue(){
+                //
+                var href = window.location.href;
+                $content.val(href);
+            };
+            //
+            $btn_demo_url.bind("click", function(e){
+                initContentValue();
+                //
+                $btn_generate_qrcode.trigger("click");
+            });
 			//
 			$btn_generate_qrcode.bind("click", function(e){
 				//
