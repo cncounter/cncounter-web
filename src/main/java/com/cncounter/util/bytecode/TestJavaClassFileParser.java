@@ -9,14 +9,15 @@ import java.io.FileInputStream;
  *
  * @see {@linktourl https://commons.apache.org/proper/commons-bcel/ }
  * @see {@linktourl https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html }
+ * @see {@linktourl http://www.softpedia.com/get/Programming/File-Editors/Java-Class-Viewer.shtml }
  *
  *
  */
-public class JavaByteCodeParseUtils {
+public class TestJavaClassFileParser {
 
     public static void main(String[] args) {
         //
-        String inputFileName = "E:\\CODE_ALL\\02_GIT_ALL\\cncounter-web\\target\\classes\\com\\cncounter\\util\\bytecode\\DemoModel.class";
+        String inputFileName = "E:\\CODE_ALL\\02_GIT_ALL\\cncounter-web\\target\\classes\\com\\cncounter\\util\\bytecode\\ByteCodeModel.class";
         try {
             //
             FileInputStream inputStream = new FileInputStream(inputFileName);

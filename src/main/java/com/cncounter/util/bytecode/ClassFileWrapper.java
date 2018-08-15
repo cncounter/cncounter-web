@@ -60,6 +60,7 @@ public class ClassFileWrapper extends ClassFile {
         System.arraycopy(rawContent, index, constantPoolCountBytes, 0, constantPoolCountLength);
         this.constantPoolCount = constantPoolCountBytes;
         String constantPoolCountHex = HexUtils.byteArrayToHex(constantPoolCount);
+        System.err.println("constantPoolCountHex="+constantPoolCountHex);
         this.constantPoolCountNumber = Integer.parseInt(constantPoolCountHex, 16);
         index += constantPoolCountLength;
         // 解析常量池
@@ -68,9 +69,11 @@ public class ClassFileWrapper extends ClassFile {
         List<ConstantItem> constantItems = new ArrayList<ConstantItem>(this.constantPoolCountNumber - 1);
         for (int i = 1; i <= this.constantPoolCountNumber; i++) {
             ConstantItem constantItem = parseConstantItem(rawContent, index);
+            if (null == constantItem) {
+                break;
+            }
             constantItems.add(constantItem);
-            index += constantItem.tag.length;
-            index += constantItem.info.length;
+            index += constantItem.getSize();
         }
         //
         int constantPoolEndIndex = index; // 常量池结束索引位置
@@ -82,21 +85,18 @@ public class ClassFileWrapper extends ClassFile {
 
 
     public ConstantItem parseConstantItem(byte[] rawContent, int startIndex) {
-        ConstantItem constantItem = new ConstantItem();
         //
-        final int tagLength = 1;
         //
         byte tagByte = rawContent[startIndex];
         int tagNumber = (int) tagByte;
         ConstantTagEnum tagEnum = ConstantTagEnum.parseByTag(tagNumber);
         //
-        constantItem.tag = new byte[tagLength];
-        constantItem.tag[0] = tagByte;
-        constantItem.tagEnum = tagEnum;
+        if (null == tagEnum) {
+            return null;
+        }
         //
-        int index = startIndex + tagLength;
-        byte[] info = parseConstantItemBy(rawContent, index, tagEnum);
-        constantItem.info = info;
+        ConstantItem constantItem = parseConstantItemBy(rawContent, startIndex, tagEnum);
+        int index = startIndex + constantItem.getSize();
         //
         System.out.println("tagNumber=" + tagNumber);
         System.out.println("tagEnum.name=" + tagEnum.name());
@@ -106,29 +106,52 @@ public class ClassFileWrapper extends ClassFile {
         return constantItem;
     }
 
-    private byte[] parseConstantItemBy(byte[] rawContent, int index, ConstantTagEnum tagEnum) {
+    private ConstantItem parseConstantItemBy(final byte[] rawContent, final int startIndex, final ConstantTagEnum tagEnum) {
         //
-        switch (tagEnum){
-            case CONSTANT_Utf8 :
-                return parseConstantItemUTF8(rawContent, index);
+        ConstantItem constantItem = null;
+        //
+        final int tagLength = 1;
+        //
+        byte tagByte = rawContent[startIndex];
+        byte[] tag = new byte[tagLength];
+        tag[0] = tagByte;
+        //
+        int index = startIndex + tagLength;
+        //
+        switch (tagEnum) {
+            case CONSTANT_Utf8:
+                constantItem = parseConstantItemUTF8(rawContent, index);
+                break;
             case CONSTANT_Methodref:
-                return parseConstantItemMethod(rawContent, index);
+                constantItem = parseConstantItemMethodref(rawContent, index);
+                break;
+            default:
+                break;
         }
 
+        if (null != constantItem) {
+            constantItem.tag = tag;
+            // 校验: 两者必须一致
+            if (tagEnum != constantItem.tagEnum) {
+                throw new RuntimeException("tagEnum不一致");
+            }
+        }
+        //
+        return constantItem;
+    }
 
-
+    private ConstantItemMethodref parseConstantItemMethodref(byte[] rawContent, int index) {
+        System.out.println("parseConstantItemMethodref()-invoked");
+        //
+        ConstantItemMethodref methodref = new ConstantItemMethodref();
+        //
 
         //
-        return new byte[0];
+        return methodref;
     }
 
-    private byte[] parseConstantItemMethod(byte[] rawContent, int index) {
-        System.out.println("parseConstantItemMethod;;;;");
-        return new byte[0];
-    }
-
-    private byte[] parseConstantItemUTF8(byte[] rawContent, int index) {
-        return new byte[0];
+    private ConstantItem parseConstantItemUTF8(byte[] rawContent, int index) {
+        return null;
     }
 
     @Override
