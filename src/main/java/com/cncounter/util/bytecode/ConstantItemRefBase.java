@@ -6,6 +6,14 @@ package com.cncounter.util.bytecode;
 public class ConstantItemRefBase extends ConstantItem{
     public byte[] classIndex; //                  u2;
     public byte[] nameAndTypeIndex; //            u2;
+
+    public Integer classIndexNumber;
+    public Integer nameAndTypeIndexNumber;
+
+    public void fillInfoArray(){
+        byte[] infoArray = concatNew(classIndex, nameAndTypeIndex);
+        super.info = infoArray;
+    }
 }
 
 
