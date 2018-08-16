@@ -21,8 +21,9 @@ public class ClassFileWrapper extends ClassFile {
     public Integer minorVersionNumber;// 次版本号
     public Integer majorVersionNumber;// 主版本号
     public Integer constantPoolCountNumber;// 常量个数
+    public Integer accessFlagsNumber;// 访问标识位集合
 
-    public List<ConstantItem> constantPoolList;// 常量个数
+    public List<ConstantItem> constantPoolList;// 常量池
 
     public ClassFileWrapper(byte[] rawContent) {
         this.rawContent = rawContent;
@@ -63,7 +64,7 @@ public class ClassFileWrapper extends ClassFile {
         int constantPoolCountLength = 2;
         byte[] constantPoolCountBytes = new byte[constantPoolCountLength];
         System.arraycopy(rawContent, index, constantPoolCountBytes, 0, constantPoolCountLength);
-        this.constantPoolCount = constantPoolCountBytes;
+        super.constantPoolCount = constantPoolCountBytes;
         String constantPoolCountHex = HexUtils.byteArrayToHex(this.constantPoolCount);
         System.out.println("constantPoolCountHex=" + constantPoolCountHex);
         this.constantPoolCountNumber = Integer.parseInt(constantPoolCountHex, 16);
@@ -91,6 +92,15 @@ public class ClassFileWrapper extends ClassFile {
         super.constantPool = constantPoolBytes;
 
         //
+
+        // 解析 访问标识 accessFlags
+        int accessFlagsLength = 2;
+        byte[] accessFlagsBytes = new byte[accessFlagsLength];
+        System.arraycopy(rawContent, index, accessFlagsBytes, 0, accessFlagsLength);
+        super.accessFlags = accessFlagsBytes;
+        String accessFlagsHex = HexUtils.byteArrayToHex(super.accessFlags);
+        this.accessFlagsNumber = Integer.parseInt(accessFlagsHex, 16);
+        index += accessFlagsLength;
 
     }
 
@@ -461,14 +471,18 @@ public class ClassFileWrapper extends ClassFile {
 
     @Override
     public String toString() {
+        //
+        final String indent1 = "\n\t";
+        //
         return "{" +
                 "\n\tmagicNumber: \"" + magicNumber + '\"' +
-                ",\n\tminorVersionNumber: " + minorVersionNumber +
-                ",\n\tmajorVersionNumber: " + majorVersionNumber +
-                ",\n\tconstantPoolCountNumber: " + constantPoolCountNumber +
-                ",\n\tconstantPoolList: " + "[" +
+                indent1 + ",minorVersionNumber: " + minorVersionNumber +
+                indent1 + ",majorVersionNumber: " + majorVersionNumber +
+                indent1 + ",constantPoolCountNumber: " + constantPoolCountNumber +
+                indent1 + ",constantPoolList: " + "[" +
                 _constantPoolListToString("\n\t\t") +
-                "\n\t]" +
+                indent1 + "]" +
+                indent1 + ",accessFlags: " + AccessFlagsEnum.parseAccessFlags(accessFlagsNumber) +
                 "\n}";
     }
 

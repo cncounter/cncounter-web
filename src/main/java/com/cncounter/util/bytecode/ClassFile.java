@@ -9,7 +9,7 @@ public abstract class ClassFile {
     public byte[] majorVersion; //      u2; 主版本号
     public byte[] constantPoolCount; // u2; 常量个数+1
     public byte[] constantPool; //        ; 常量池; 个数 constantPoolCount-1
-    public byte[] access_flags; //      u2; 访问标识
+    public byte[] accessFlags; //       u2; 访问标识
     public byte[] thisClass; //         u2; 本类索引
     public byte[] superClass; //        u2; 父类索引
     public byte[] interfacesCount; //   u2; 接口数量

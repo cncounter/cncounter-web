@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * 字节码示例模型-仅作示例使用
  */
-public class ByteCodeModel implements Serializable {
+public final class ByteCodeModel implements Serializable {
 
     public static final String NAME_DEFAULT = "测试用户";
     //
@@ -14,7 +14,7 @@ public class ByteCodeModel implements Serializable {
     private float hight = 0.0F;
     private double money = 0.0D;
     private long ts = 0L;
-    private String name = NAME_DEFAULT;
+    public String name = NAME_DEFAULT;
 
     public String getName() {
         return this.name;
