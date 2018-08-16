@@ -24,9 +24,11 @@ public class ClassFileWrapper extends ClassFile {
     public Integer accessFlagsNumber;// 访问标识位集合
     public Integer thisClassIndex;// 本类索引位置
     public Integer superClassIndex;// super类索引位置
-    public Integer interfacesCount;// interface数量
+    public Integer interfacesCount;// 实现的interface数量
+    public Integer fieldsCountNumber;// fields 数量
 
     public List<ConstantItem> constantPoolList;// 常量池
+    public List<Integer> interfacesIndexList;// 实现的interfaces列表
 
     public ClassFileWrapper(byte[] rawContent) {
         this.rawContent = rawContent;
@@ -75,11 +77,11 @@ public class ClassFileWrapper extends ClassFile {
         // 解析常量池
         int constantPoolStartIndex = index; // 常量池起始索引位置
         //
-        List<ConstantItem> constantItems = new ArrayList<ConstantItem>(this.constantPoolCountNumber - 1);
+        List<ConstantItem> constantItems = new ArrayList<ConstantItem>();
         for (int i = 1; i < this.constantPoolCountNumber; i++) {
             ConstantItem constantItem = parseConstantItem(rawContent, index);
             if (null == constantItem) {
-                System.err.println("constantItem is null; index="+index);
+                System.err.println("constantItem is null; index=" + index);
                 break;
             }
             constantItems.add(constantItem);
@@ -119,6 +121,7 @@ public class ClassFileWrapper extends ClassFile {
         String superClassHex = HexUtils.byteArrayToHex(super.superClass);
         this.superClassIndex = Integer.parseInt(superClassHex, 16);
         index += superClassLength;
+
         //
         // 解析 interfacesCount
         int interfacesCountLength = 2;
@@ -128,6 +131,35 @@ public class ClassFileWrapper extends ClassFile {
         String interfacesCountHex = HexUtils.byteArrayToHex(super.interfacesCount);
         this.interfacesCount = Integer.parseInt(interfacesCountHex, 16);
         index += interfacesCountLength;
+        // 解析 interfaces
+        this.interfacesIndexList = new ArrayList<Integer>();
+        int interfacesStartIndex = index; // interfaces起始索引位置
+        for (int i = 0; i < this.interfacesCount; i++) {
+            // integer-2
+            int interfacesItemLength = 2;
+            byte[] interfacesItemBytes = new byte[interfacesItemLength];
+            System.arraycopy(rawContent, index, interfacesItemBytes, 0, interfacesItemLength);
+            String interfacesItemHex = HexUtils.byteArrayToHex(interfacesItemBytes);
+            Integer item = Integer.parseInt(interfacesItemHex, 16);
+            interfacesIndexList.add(item);
+            index += interfacesItemLength;
+        }
+        int interfacesEndIndex = index; // interfaces起始索引位置
+        // interfaces 索引长度
+        int interfacesLength = interfacesEndIndex - interfacesStartIndex;
+        byte[] interfacesBytes = new byte[interfacesLength];
+        System.arraycopy(rawContent, interfacesStartIndex, interfacesBytes, 0, interfacesLength);
+        super.interfaces = interfacesBytes;
+
+        //
+        // 解析 fieldsCount
+        int fieldsCountLength = 2;
+        byte[] fieldsCountBytes = new byte[fieldsCountLength];
+        System.arraycopy(rawContent, index, fieldsCountBytes, 0, fieldsCountLength);
+        super.fieldsCount = fieldsCountBytes;
+        String fieldsCountHex = HexUtils.byteArrayToHex(super.fieldsCount);
+        this.fieldsCountNumber = Integer.parseInt(fieldsCountHex, 16);
+        index += fieldsCountLength;
 
     }
 
@@ -506,13 +538,18 @@ public class ClassFileWrapper extends ClassFile {
                 indent1 + ",minorVersionNumber: " + minorVersionNumber +
                 indent1 + ",majorVersionNumber: " + majorVersionNumber +
                 indent1 + ",constantPoolCountNumber: " + constantPoolCountNumber +
+                // 垫一个0位置
                 indent1 + ",constantPoolList: " + "[{}," +
                 _constantPoolListToString("\n\t\t") +
                 indent1 + "]" +
+
                 indent1 + ",accessFlags: " + "\"" + AccessFlagsEnum.parseAccessFlags(accessFlagsNumber) + "\"" +
                 indent1 + ",thisClassIndex: " + thisClassIndex +
                 indent1 + ",superClassIndex: " + superClassIndex +
                 indent1 + ",interfacesCount: " + interfacesCount +
+                indent1 + ",fieldsCountNumber: " + fieldsCountNumber +
+                indent1 + ",interfacesIndexList: " + "[" +
+                _interfacesIndexListToString("\n\t\t") + "]" +
                 "\n}";
     }
 
@@ -524,10 +561,28 @@ public class ClassFileWrapper extends ClassFile {
         for (ConstantItem item : constantPoolList) {
             if (null == item) {
                 continue;
-            } else if(!result.isEmpty()){
+            } else if (!result.isEmpty()) {
                 result += ",";
             }
             result += item.toString(indent);
+        }
+
+        //
+        return result;
+    }
+
+    private String _interfacesIndexListToString(String indent) {
+        if (null == interfacesIndexList || interfacesIndexList.isEmpty()) {
+            return "";
+        }
+        String result = "";
+        for (Integer item : interfacesIndexList) {
+            if (null == item) {
+                continue;
+            } else if (!result.isEmpty()) {
+                result += ",";
+            }
+            result += item;
         }
 
         //

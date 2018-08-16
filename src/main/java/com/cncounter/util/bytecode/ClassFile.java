@@ -12,8 +12,8 @@ public abstract class ClassFile {
     public byte[] accessFlags; //       u2; 访问标识
     public byte[] thisClass; //         u2; 本类对应的索引位置
     public byte[] superClass; //        u2; 父类索引
-    public byte[] interfacesCount; //   u2; 接口数量
-    public byte[] interfaces; //          ; 接口内容; 个数 interfacesCount
+    public byte[] interfacesCount; //   u2; 实现的接口数量
+    public byte[] interfaces; //          ; 实现的接口索引数组; 个数=interfacesCount
     public byte[] fieldsCount; //       u2; 字段数量
     public byte[] fields; //              ; 字段表; 个数 fieldsCount
     public byte[] methodsCount; //      u2; 方法数量
