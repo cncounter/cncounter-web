@@ -22,6 +22,7 @@ public class ClassFileWrapper extends ClassFile {
     public Integer majorVersionNumber;// 主版本号
     public Integer constantPoolCountNumber;// 常量个数
     public Integer accessFlagsNumber;// 访问标识位集合
+    public Integer thisClassIndex;// 本类索引位置
 
     public List<ConstantItem> constantPoolList;// 常量池
 
@@ -66,7 +67,7 @@ public class ClassFileWrapper extends ClassFile {
         System.arraycopy(rawContent, index, constantPoolCountBytes, 0, constantPoolCountLength);
         super.constantPoolCount = constantPoolCountBytes;
         String constantPoolCountHex = HexUtils.byteArrayToHex(this.constantPoolCount);
-        System.out.println("constantPoolCountHex=" + constantPoolCountHex);
+        //System.out.println("constantPoolCountHex=" + constantPoolCountHex);
         this.constantPoolCountNumber = Integer.parseInt(constantPoolCountHex, 16);
         index += constantPoolCountLength;
         // 解析常量池
@@ -92,7 +93,6 @@ public class ClassFileWrapper extends ClassFile {
         super.constantPool = constantPoolBytes;
 
         //
-
         // 解析 访问标识 accessFlags
         int accessFlagsLength = 2;
         byte[] accessFlagsBytes = new byte[accessFlagsLength];
@@ -101,6 +101,14 @@ public class ClassFileWrapper extends ClassFile {
         String accessFlagsHex = HexUtils.byteArrayToHex(super.accessFlags);
         this.accessFlagsNumber = Integer.parseInt(accessFlagsHex, 16);
         index += accessFlagsLength;
+        // 解析 访问标识 thisClass
+        int thisClassLength = 2;
+        byte[] thisClassBytes = new byte[thisClassLength];
+        System.arraycopy(rawContent, index, thisClassBytes, 0, thisClassLength);
+        super.thisClass = thisClassBytes;
+        String thisClassHex = HexUtils.byteArrayToHex(super.thisClass);
+        this.thisClassIndex = Integer.parseInt(thisClassHex, 16);
+        index += thisClassLength;
 
     }
 
@@ -179,8 +187,8 @@ public class ClassFileWrapper extends ClassFile {
         }
 
         //
-        System.out.println("tagNumber=" + tagNumber + "; tagEnum.name=" + tagEnum.name());
-        System.out.println("----------------------------");
+        //System.out.println("tagNumber=" + tagNumber + "; tagEnum.name=" + tagEnum.name());
+        //System.out.println("----------------------------");
 
         //
         return constantItem;
@@ -482,7 +490,8 @@ public class ClassFileWrapper extends ClassFile {
                 indent1 + ",constantPoolList: " + "[" +
                 _constantPoolListToString("\n\t\t") +
                 indent1 + "]" +
-                indent1 + ",accessFlags: " + AccessFlagsEnum.parseAccessFlags(accessFlagsNumber) +
+                indent1 + ",accessFlags: " + "\"" + AccessFlagsEnum.parseAccessFlags(accessFlagsNumber) + "\"" +
+                indent1 + ",thisClassIndex: " + thisClassIndex +
                 "\n}";
     }
 
@@ -492,9 +501,9 @@ public class ClassFileWrapper extends ClassFile {
         }
         String result = "";
         for (ConstantItem item : constantPoolList) {
-            if (null == indent) {
+            if (null == item) {
                 continue;
-            } else {
+            } else if(!result.isEmpty()){
                 result += ",";
             }
             result += item.toString(indent);

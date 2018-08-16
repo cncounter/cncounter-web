@@ -25,7 +25,7 @@ public class ConstantItem {
     public String toString(String indent) {
         return indent + "{" +
                 indent + "\ttag:" + Integer.parseInt(HexUtils.byteArrayToHex(tag), 16) + "," +
-                indent + "\ttagEnum:" + tagEnum.name() + "," +
+                indent + "\ttagEnum:" + "\"" + tagEnum.name() + "\"" + "," +
                 indent + "\tinfo:" + "\"" + HexUtils.byteArrayToHex(info) + "\"" +
                 indent + '}';
     }
@@ -41,7 +41,7 @@ public class ConstantItem {
         byte[] targetArray = new byte[size];
         // copy
         System.arraycopy(arr1, 0, targetArray, 0, arr1.length);
-        System.arraycopy(arr2, 0, targetArray, arr1.length-1, arr2.length);
+        System.arraycopy(arr2, 0, targetArray, arr1.length - 1, arr2.length);
         //
         return targetArray;
     }

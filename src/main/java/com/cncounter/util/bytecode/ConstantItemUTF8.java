@@ -21,7 +21,7 @@ public class ConstantItemUTF8 extends ConstantItem {
     public String toString(String indent) {
         return indent + "{" +
                 indent + "\ttag:" + Integer.parseInt(HexUtils.byteArrayToHex(tag), 16) + "," +
-                indent + "\ttagEnum:" + tagEnum.name() + "," +
+                indent + "\ttagEnum:" + "\"" + tagEnum.name() + "\"" + "," +
                 indent + "\tlengthNumber:" + lengthNumber + "," +
                 indent + "\tvalue:" + "\"" + value + "\"" + "," +
                 indent + "\tinfo:" + "\"" + HexUtils.byteArrayToHex(info) + "\"" +
