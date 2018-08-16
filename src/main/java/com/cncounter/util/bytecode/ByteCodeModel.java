@@ -1,64 +1,58 @@
 package com.cncounter.util.bytecode;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
- * 字节码模型 - 基础类
+ * 字节码示例模型-仅作示例使用
  */
-public class ByteCodeModel {
-    // 原始字节数组
-    private byte[] rawByteCode = null;
-    // 十六进制编码
-    private String hexString = null;
-    // 子列表
-    private List<ByteCodeModel> subModelList = new ArrayList<ByteCodeModel>();
+public class ByteCodeModel implements Serializable {
 
-    public byte[] getRawByteCode() {
-        return this.rawByteCode;
+    public static final String NAME_DEFAULT = "测试用户";
+    //
+    private int id = 0;
+    private float hight = 0.0F;
+    private double money = 0.0D;
+    private long ts = 0L;
+    private String name = NAME_DEFAULT;
+
+    public String getName() {
+        return this.name;
     }
 
-    public void setRawByteCode(byte[] rawByteCode) {
-        this.rawByteCode = rawByteCode;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getHexString() {
-        return this.hexString;
+    public int getId() {
+        return this.id;
     }
 
-    public void setHexString(String hexString) {
-        this.hexString = hexString;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public List<ByteCodeModel> getSubModelList() {
-        return this.subModelList;
+    public float getHight() {
+        return this.hight;
     }
 
-    public void setSubModelList(List<ByteCodeModel> subModelList) {
-        this.subModelList = subModelList;
+    public void setHight(float hight) {
+        this.hight = hight;
     }
 
-    // 返回 16进制格式的字符串
-    public String toHexString() {
-        if (null != hexString) {
-            return hexString;
-        }
-        if (null != rawByteCode) {
-            hexString = HexUtils.encodeHexString(rawByteCode);
-            return hexString;
-        }
-
-        return hexString;
+    public double getMoney() {
+        return this.money;
     }
 
-    // 返回 文本 格式
-    public String toText() {
-        return toHexString();
+    public void setMoney(double money) {
+        this.money = money;
     }
 
-    // 返回 HTML 格式
-    public String toHTML() {
-        return toHexString();
+    public long getTs() {
+        return this.ts;
+    }
+
+    public void setTs(long ts) {
+        this.ts = ts;
     }
 }

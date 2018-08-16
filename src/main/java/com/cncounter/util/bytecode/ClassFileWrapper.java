@@ -1,5 +1,6 @@
 package com.cncounter.util.bytecode;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -71,9 +72,10 @@ public class ClassFileWrapper extends ClassFile {
         int constantPoolStartIndex = index; // 常量池起始索引位置
         //
         List<ConstantItem> constantItems = new ArrayList<ConstantItem>(this.constantPoolCountNumber - 1);
-        for (int i = 1; i <= this.constantPoolCountNumber; i++) {
+        for (int i = 1; i < this.constantPoolCountNumber; i++) {
             ConstantItem constantItem = parseConstantItem(rawContent, index);
             if (null == constantItem) {
+                System.err.println("constantItem is null; index="+index);
                 break;
             }
             constantItems.add(constantItem);
@@ -131,22 +133,28 @@ public class ClassFileWrapper extends ClassFile {
                 constantItem = parseConstantItemDouble(rawContent, index);
                 break;
             case CONSTANT_Class:
+                constantItem = parseConstantItemClass(rawContent, index);
                 break;
             case CONSTANT_String:
+                constantItem = parseConstantItemString(rawContent, index);
                 break;
-            //
+            // 3个的解析方式类似
             case CONSTANT_Fieldref:
             case CONSTANT_Methodref:
             case CONSTANT_InterfaceMethodref:
                 constantItem = parseConstantItemRefBase(rawContent, index, tagEnum);
                 break;
             case CONSTANT_NameAndType:
+                constantItem = parseConstantItemNameAndType(rawContent, index);
                 break;
             case CONSTANT_MethodHandle:
+                constantItem = parseConstantItemMethodHandle(rawContent, index);
                 break;
             case CONSTANT_MethodType:
+                constantItem = parseConstantItemMethodType(rawContent, index);
                 break;
             case CONSTANT_InvokeDynamic:
+                constantItem = parseConstantItemInvokeDynamic(rawContent, index);
                 break;
             default:
                 return null; // 不匹配...
@@ -168,9 +176,32 @@ public class ClassFileWrapper extends ClassFile {
         return constantItem;
     }
 
-
     private ConstantItem parseConstantItemUTF8(byte[] rawContent, int index) {
-        return null;
+        //
+        ConstantItemUTF8 item = new ConstantItemUTF8();
+        // 解析 length
+        int lengthLength = 2;
+        byte[] lengthBytes = new byte[lengthLength];
+        System.arraycopy(rawContent, index, lengthBytes, 0, lengthLength);
+        item.length = lengthBytes;
+        String lengthHex = HexUtils.byteArrayToHex(item.length);
+        item.lengthNumber = Integer.parseInt(lengthHex, 16);
+        index += lengthLength;
+        // 解析 bytes
+        int bytesLength = item.lengthNumber;
+        byte[] bytesBytes = new byte[bytesLength];
+        System.arraycopy(rawContent, index, bytesBytes, 0, bytesLength);
+        item.bytes = bytesBytes;
+        try {
+            item.value = new String(item.bytes, UTF_8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        index += bytesLength;
+        //
+        item.info = ConstantItem.concatNew(item.length, item.bytes);
+        //
+        return item;
     }
 
     private ConstantItemInteger parseConstantItemInteger(byte[] rawContent, int index) {
@@ -181,10 +212,11 @@ public class ClassFileWrapper extends ClassFile {
         byte[] bytesBytes = new byte[bytesLength];
         System.arraycopy(rawContent, index, bytesBytes, 0, bytesLength);
         item.bytes = bytesBytes;
-        item.info = item.bytes;
         String bytesHex = HexUtils.byteArrayToHex(item.bytes);
         item.value = Integer.parseInt(bytesHex, 16);
         index += bytesLength;
+        //
+        item.info = item.bytes;
         //
         return item;
     }
@@ -197,10 +229,10 @@ public class ClassFileWrapper extends ClassFile {
         byte[] bytesBytes = new byte[bytesLength];
         System.arraycopy(rawContent, index, bytesBytes, 0, bytesLength);
         item.bytes = bytesBytes;
-        item.info = item.bytes;
         item.value = ByteBuffer.wrap(item.bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
-        ;
         index += bytesLength;
+        //
+        item.info = item.bytes;
         //
         return item;
     }
@@ -223,9 +255,9 @@ public class ClassFileWrapper extends ClassFile {
 
         //
         byte[] targetBytes = ConstantItem.concatNew(item.highBytes, item.lowBytes);
-        item.info = targetBytes;
-        //
         item.value = ConstantItemLong.bytesToLong(targetBytes);
+        //
+        item.info = targetBytes;
         //
         return item;
     }
@@ -248,9 +280,44 @@ public class ClassFileWrapper extends ClassFile {
 
         //
         byte[] targetBytes = ConstantItem.concatNew(item.highBytes, item.lowBytes);
+        item.value = ConstantItemDouble.bytesToDouble(targetBytes);
+        //
         item.info = targetBytes;
         //
-        item.value = ConstantItemDouble.bytesToDouble(targetBytes);
+        return item;
+    }
+
+
+    private ConstantItemClass parseConstantItemClass(byte[] rawContent, int index) {
+        //
+        ConstantItemClass item = new ConstantItemClass();
+        // 解析 nameIndex
+        int nameIndexLength = 2;
+        byte[] nameIndexBytes = new byte[nameIndexLength];
+        System.arraycopy(rawContent, index, nameIndexBytes, 0, nameIndexLength);
+        item.nameIndex = nameIndexBytes;
+        String nameIndexHex = HexUtils.byteArrayToHex(item.nameIndex);
+        item.nameIndexNumber = Integer.parseInt(nameIndexHex, 16);
+        index += nameIndexLength;
+        //
+        item.info = item.nameIndex;
+        //
+        return item;
+    }
+
+    private ConstantItemString parseConstantItemString(byte[] rawContent, int index) {
+        //
+        ConstantItemString item = new ConstantItemString();
+        // 解析 stringIndex
+        int stringIndexLength = 2;
+        byte[] stringIndexBytes = new byte[stringIndexLength];
+        System.arraycopy(rawContent, index, stringIndexBytes, 0, stringIndexLength);
+        item.stringIndex = stringIndexBytes;
+        String stringIndexHex = HexUtils.byteArrayToHex(item.stringIndex);
+        item.stringIndexNumber = Integer.parseInt(stringIndexHex, 16);
+        index += stringIndexLength;
+        //
+        item.info = item.stringIndex;
         //
         return item;
     }
@@ -298,6 +365,98 @@ public class ClassFileWrapper extends ClassFile {
         itemref.fillInfoArray();
         //
         return itemref;
+    }
+
+    private ConstantItemNameAndType parseConstantItemNameAndType(byte[] rawContent, int index) {
+        //
+        ConstantItemNameAndType item = new ConstantItemNameAndType();
+        // 解析 nameIndex
+        int nameIndexLength = 2;
+        byte[] nameIndexBytes = new byte[nameIndexLength];
+        System.arraycopy(rawContent, index, nameIndexBytes, 0, nameIndexLength);
+        item.nameIndex = nameIndexBytes;
+        String nameIndexHex = HexUtils.byteArrayToHex(item.nameIndex);
+        item.nameIndexNumber = Integer.parseInt(nameIndexHex, 16);
+        index += nameIndexLength;
+        // 解析 descriptorIndex
+        int descriptorIndexLength = 2;
+        byte[] descriptorIndexBytes = new byte[descriptorIndexLength];
+        System.arraycopy(rawContent, index, descriptorIndexBytes, 0, descriptorIndexLength);
+        item.descriptorIndex = descriptorIndexBytes;
+        String descriptorIndexHex = HexUtils.byteArrayToHex(item.descriptorIndex);
+        item.descriptorIndexNumber = Integer.parseInt(descriptorIndexHex, 16);
+        index += descriptorIndexLength;
+        //
+        item.info = ConstantItem.concatNew(item.nameIndex, item.descriptorIndex);
+        //
+        return item;
+    }
+
+    private ConstantItemMethodHandle parseConstantItemMethodHandle(byte[] rawContent, int index) {
+        //
+        ConstantItemMethodHandle item = new ConstantItemMethodHandle();
+        // 解析 referenceKind
+        int referenceKindLength = 1;
+        byte[] referenceKindBytes = new byte[referenceKindLength];
+        System.arraycopy(rawContent, index, referenceKindBytes, 0, referenceKindLength);
+        item.referenceKind = referenceKindBytes;
+        String referenceKindHex = HexUtils.byteArrayToHex(item.referenceKind);
+        item.referenceKindNumber = Integer.parseInt(referenceKindHex, 16);
+        index += referenceKindLength;
+        // 解析 referenceIndex
+        int referenceIndexLength = 1;
+        byte[] referenceIndexBytes = new byte[referenceIndexLength];
+        System.arraycopy(rawContent, index, referenceIndexBytes, 0, referenceIndexLength);
+        item.referenceIndex = referenceIndexBytes;
+        String referenceIndexHex = HexUtils.byteArrayToHex(item.referenceIndex);
+        item.referenceIndexNumber = Integer.parseInt(referenceIndexHex, 16);
+        index += referenceIndexLength;
+        //
+        item.info = ConstantItem.concatNew(item.referenceKind, item.referenceIndex);
+        //
+        return item;
+    }
+
+    private ConstantItemMethodType parseConstantItemMethodType(byte[] rawContent, int index) {
+        //
+        ConstantItemMethodType item = new ConstantItemMethodType();
+        // 解析 descriptorIndex
+        int descriptorIndexLength = 2;
+        byte[] descriptorIndexBytes = new byte[descriptorIndexLength];
+        System.arraycopy(rawContent, index, descriptorIndexBytes, 0, descriptorIndexLength);
+        item.descriptorIndex = descriptorIndexBytes;
+        String descriptorIndexHex = HexUtils.byteArrayToHex(item.descriptorIndex);
+        item.descriptorIndexNumber = Integer.parseInt(descriptorIndexHex, 16);
+        index += descriptorIndexLength;
+        //
+        item.info = item.descriptorIndex;
+        //
+        return item;
+    }
+
+    private ConstantItemInvokeDynamic parseConstantItemInvokeDynamic(byte[] rawContent, int index) {
+        //
+        ConstantItemInvokeDynamic item = new ConstantItemInvokeDynamic();
+        // 解析 bootstrapMethodAttrIndex
+        int bootstrapMethodAttrIndexLength = 2;
+        byte[] bootstrapMethodAttrIndexBytes = new byte[bootstrapMethodAttrIndexLength];
+        System.arraycopy(rawContent, index, bootstrapMethodAttrIndexBytes, 0, bootstrapMethodAttrIndexLength);
+        item.bootstrapMethodAttrIndex = bootstrapMethodAttrIndexBytes;
+        String bootstrapMethodAttrIndexHex = HexUtils.byteArrayToHex(item.bootstrapMethodAttrIndex);
+        item.bootstrapMethodAttrIndexNumber = Integer.parseInt(bootstrapMethodAttrIndexHex, 16);
+        index += bootstrapMethodAttrIndexLength;
+        // 解析 nameAndTypeIndex
+        int nameAndTypeIndexLength = 2;
+        byte[] nameAndTypeIndexBytes = new byte[nameAndTypeIndexLength];
+        System.arraycopy(rawContent, index, nameAndTypeIndexBytes, 0, nameAndTypeIndexLength);
+        item.nameAndTypeIndex = nameAndTypeIndexBytes;
+        String nameAndTypeIndexHex = HexUtils.byteArrayToHex(item.nameAndTypeIndex);
+        item.nameAndTypeIndexNumber = Integer.parseInt(nameAndTypeIndexHex, 16);
+        index += nameAndTypeIndexLength;
+        //
+        item.info = ConstantItem.concatNew(item.bootstrapMethodAttrIndex, item.nameAndTypeIndex);
+        //
+        return item;
     }
 
     @Override
