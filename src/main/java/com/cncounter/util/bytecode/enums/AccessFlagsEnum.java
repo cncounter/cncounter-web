@@ -1,4 +1,4 @@
-package com.cncounter.util.bytecode;
+package com.cncounter.util.bytecode.enums;
 
 /**
  * 访问标识
@@ -18,7 +18,7 @@ public enum AccessFlagsEnum {
     //
     ACC_INTERFACE(0x0200, "interface"),
     ACC_ABSTRACT(0x0400, "abstract"),
-    // 如 <init> 等编译器生成的方法,或泛型类
+    // 由编译器自动生成-标记
     ACC_SYNTHETIC(0x1000, "<synthetic>"),
     ACC_ANNOTATION(0x2000, "@interface"),
     ACC_ENUM(0x4000, "enum");

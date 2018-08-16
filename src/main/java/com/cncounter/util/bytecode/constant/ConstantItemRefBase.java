@@ -1,4 +1,4 @@
-package com.cncounter.util.bytecode;
+package com.cncounter.util.bytecode.constant;
 
 /**
  * Created on 2018-08-15.

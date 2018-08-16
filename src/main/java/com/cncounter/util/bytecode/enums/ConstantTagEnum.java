@@ -1,4 +1,4 @@
-package com.cncounter.util.bytecode;
+package com.cncounter.util.bytecode.enums;
 
 
 // 常量标签

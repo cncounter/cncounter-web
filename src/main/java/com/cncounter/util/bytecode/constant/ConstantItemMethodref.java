@@ -1,4 +1,6 @@
-package com.cncounter.util.bytecode;
+package com.cncounter.util.bytecode.constant;
+
+import com.cncounter.util.bytecode.enums.ConstantTagEnum;
 
 /**
  * 常量条目-方法引用

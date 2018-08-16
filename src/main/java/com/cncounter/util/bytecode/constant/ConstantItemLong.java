@@ -1,17 +1,21 @@
-package com.cncounter.util.bytecode;
+package com.cncounter.util.bytecode.constant;
+
+import com.cncounter.util.bytecode.enums.ConstantTagEnum;
 
 /**
  * Created on 2018-08-15.
  */
-public class ConstantItemDouble extends ConstantItem{
+public class ConstantItemLong extends ConstantItem{
     public byte[] highBytes; //                  u4;
     public byte[] lowBytes; //                    u4;
 
-    public Double value;
+    public Long value;
 
-    public ConstantItemDouble() {
-        super.tagEnum = ConstantTagEnum.CONSTANT_Double;
+    public ConstantItemLong() {
+        super.tagEnum = ConstantTagEnum.CONSTANT_Long;
     }
+
+
 }
 
 

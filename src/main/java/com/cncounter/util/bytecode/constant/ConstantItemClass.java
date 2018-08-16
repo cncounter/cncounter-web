@@ -1,4 +1,7 @@
-package com.cncounter.util.bytecode;
+package com.cncounter.util.bytecode.constant;
+
+import com.cncounter.util.bytecode.HexUtils;
+import com.cncounter.util.bytecode.enums.ConstantTagEnum;
 
 /**
  * Created on 2018-08-15.

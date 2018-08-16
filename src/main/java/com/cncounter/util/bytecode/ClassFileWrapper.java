@@ -1,5 +1,9 @@
 package com.cncounter.util.bytecode;
 
+import com.cncounter.util.bytecode.constant.*;
+import com.cncounter.util.bytecode.enums.AccessFlagsEnum;
+import com.cncounter.util.bytecode.enums.ConstantTagEnum;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -26,9 +30,11 @@ public class ClassFileWrapper extends ClassFile {
     public Integer superClassIndex;// super类索引位置
     public Integer interfacesCount;// 实现的interface数量
     public Integer fieldsCountNumber;// fields 数量
+    public Integer methodsCountNumber;// methods 数量
 
     public List<ConstantItem> constantPoolList;// 常量池
     public List<Integer> interfacesIndexList;// 实现的interfaces列表
+    public List<FieldInfo> fieldInfoList;//  fieldInfo 列表
 
     public ClassFileWrapper(byte[] rawContent) {
         this.rawContent = rawContent;
@@ -160,6 +166,43 @@ public class ClassFileWrapper extends ClassFile {
         String fieldsCountHex = HexUtils.byteArrayToHex(super.fieldsCount);
         this.fieldsCountNumber = Integer.parseInt(fieldsCountHex, 16);
         index += fieldsCountLength;
+
+        //
+        int fieldsStartIndex = index;
+        List<FieldInfo> fieldInfoList = new ArrayList<FieldInfo>();
+        // 解析 fields
+        for (int i = 0; i < this.fieldsCountNumber; i++) {
+            //
+            FieldInfo fieldInfo = parseFieldInfo(rawContent, index);
+            if (null == fieldInfo) {
+                throw new RuntimeException("fieldInfo 不能为null; index=" + index);
+            }
+            //
+            fieldInfoList.add(fieldInfo);
+            //
+            index += fieldInfo.getSize();
+        }
+        if(!fieldInfoList.isEmpty()){
+            this.fieldInfoList = fieldInfoList;
+        }
+        //
+        int fieldsEndIndex = index;
+        // fields 索引长度
+        int fieldsLength = fieldsEndIndex - fieldsStartIndex;
+        byte[] fieldsBytes = new byte[fieldsLength];
+        System.arraycopy(rawContent, fieldsStartIndex, fieldsBytes, 0, fieldsLength);
+        super.fields = fieldsBytes;
+
+        //
+        // 解析 methodsCount
+        int methodsCountLength = 2;
+        byte[] methodsCountBytes = new byte[methodsCountLength];
+        System.arraycopy(rawContent, index, methodsCountBytes, 0, methodsCountLength);
+        super.methodsCount = methodsCountBytes;
+        String methodsCountHex = HexUtils.byteArrayToHex(super.methodsCount);
+        this.methodsCountNumber = Integer.parseInt(methodsCountHex, 16);
+        index += methodsCountLength;
+        //
 
     }
 
@@ -528,6 +571,112 @@ public class ClassFileWrapper extends ClassFile {
         return item;
     }
 
+
+    public FieldInfo parseFieldInfo(byte[] rawContent, final int startIndex) {
+        //
+        FieldInfo fieldInfo = new FieldInfo();
+        //
+        int index = startIndex;
+
+        // 解析 accessFlags
+        int accessFlagsLength = 2;
+        byte[] accessFlagsBytes = new byte[accessFlagsLength];
+        System.arraycopy(rawContent, index, accessFlagsBytes, 0, accessFlagsLength);
+        fieldInfo.accessFlags = accessFlagsBytes;
+        String accessFlagsHex = HexUtils.byteArrayToHex(fieldInfo.accessFlags);
+        fieldInfo.accessFlagsNumber = Integer.parseInt(accessFlagsHex, 16);
+        index += accessFlagsLength;
+
+        // 解析 nameIndex
+        int nameIndexLength = 2;
+        byte[] nameIndexBytes = new byte[nameIndexLength];
+        System.arraycopy(rawContent, index, nameIndexBytes, 0, nameIndexLength);
+        fieldInfo.nameIndex = nameIndexBytes;
+        String nameIndexHex = HexUtils.byteArrayToHex(fieldInfo.nameIndex);
+        fieldInfo.nameIndexNumber = Integer.parseInt(nameIndexHex, 16);
+        index += nameIndexLength;
+
+        // 解析 descriptorIndex
+        int descriptorIndexLength = 2;
+        byte[] descriptorIndexBytes = new byte[descriptorIndexLength];
+        System.arraycopy(rawContent, index, descriptorIndexBytes, 0, descriptorIndexLength);
+        fieldInfo.descriptorIndex = descriptorIndexBytes;
+        String descriptorIndexHex = HexUtils.byteArrayToHex(fieldInfo.descriptorIndex);
+        fieldInfo.descriptorIndexNumber = Integer.parseInt(descriptorIndexHex, 16);
+        index += descriptorIndexLength;
+
+        // 解析 attributesCount
+        int attributesCountLength = 2;
+        byte[] attributesCountBytes = new byte[attributesCountLength];
+        System.arraycopy(rawContent, index, attributesCountBytes, 0, attributesCountLength);
+        fieldInfo.attributesCount = attributesCountBytes;
+        String attributesCountHex = HexUtils.byteArrayToHex(fieldInfo.attributesCount);
+        fieldInfo.attributesCountNumber = Integer.parseInt(attributesCountHex, 16);
+        index += attributesCountLength;
+        //
+        int attributesStartIndex = index;
+        //
+        List<AttributeInfo> attributeInfoList = new ArrayList<AttributeInfo>();
+        //
+        for (int i = 0; i < fieldInfo.attributesCountNumber; i++) {
+            //
+            AttributeInfo attributeInfo = parseAttributeInfo(rawContent, index);
+            if (null == attributeInfo) {
+                throw new RuntimeException("attributeInfo不能为null; index=" + index);
+            }
+            //
+            attributeInfoList.add(attributeInfo);
+            //
+            index += attributeInfo.getSize();
+        }
+        if(!attributeInfoList.isEmpty()){
+            fieldInfo.attributeInfoList = attributeInfoList;
+        }
+        //
+        int attributesEndIndex = index;
+        // attributes 索引长度
+        int attributesLength = attributesEndIndex - attributesStartIndex;
+        byte[] attributesBytes = new byte[attributesLength];
+        System.arraycopy(rawContent, attributesStartIndex, attributesBytes, 0, attributesLength);
+        fieldInfo.attributes = attributesBytes;
+
+        //
+        return fieldInfo;
+    }
+
+    private AttributeInfo parseAttributeInfo(byte[] rawContent, int index) {
+        //
+        AttributeInfo attributeInfo = new AttributeInfo();
+        // 解析 attributeNameIndex
+        int attributeNameIndexLength = 2;
+        byte[] attributeNameIndexBytes = new byte[attributeNameIndexLength];
+        System.arraycopy(rawContent, index, attributeNameIndexBytes, 0, attributeNameIndexLength);
+        attributeInfo.attributeNameIndex = attributeNameIndexBytes;
+        String attributeNameIndexHex = HexUtils.byteArrayToHex(attributeInfo.attributeNameIndex);
+        attributeInfo.attributeNameIndexNumber = Integer.parseInt(attributeNameIndexHex, 16);
+        index += attributeNameIndexLength;
+
+        // 解析 attributeLength
+        int attributeLengthLength = 4;
+        byte[] attributeLengthBytes = new byte[attributeLengthLength];
+        System.arraycopy(rawContent, index, attributeLengthBytes, 0, attributeLengthLength);
+        attributeInfo.attributeLength = attributeLengthBytes;
+        String attributeLengthHex = HexUtils.byteArrayToHex(attributeInfo.attributeLength);
+        attributeInfo.attributeLengthNumber = Integer.parseInt(attributeLengthHex, 16);
+        index += attributeLengthLength;
+
+        // 解析 info
+        int infoLength = attributeInfo.attributeLengthNumber;
+        byte[] infoBytes = new byte[infoLength];
+        System.arraycopy(rawContent, index, infoBytes, 0, infoLength);
+        attributeInfo.info = infoBytes;
+        index += infoLength;
+
+        //
+        return attributeInfo;
+    }
+
+
     @Override
     public String toString() {
         //
@@ -547,9 +696,10 @@ public class ClassFileWrapper extends ClassFile {
                 indent1 + ",thisClassIndex: " + thisClassIndex +
                 indent1 + ",superClassIndex: " + superClassIndex +
                 indent1 + ",interfacesCount: " + interfacesCount +
-                indent1 + ",fieldsCountNumber: " + fieldsCountNumber +
                 indent1 + ",interfacesIndexList: " + "[" +
                 _interfacesIndexListToString("\n\t\t") + "]" +
+                indent1 + ",fieldsCountNumber: " + fieldsCountNumber +
+                indent1 + ",methodsCountNumber: " + methodsCountNumber +
                 "\n}";
     }
 
