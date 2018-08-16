@@ -23,6 +23,8 @@ public class ClassFileWrapper extends ClassFile {
     public Integer constantPoolCountNumber;// 常量个数
     public Integer accessFlagsNumber;// 访问标识位集合
     public Integer thisClassIndex;// 本类索引位置
+    public Integer superClassIndex;// super类索引位置
+    public Integer interfacesCount;// interface数量
 
     public List<ConstantItem> constantPoolList;// 常量池
 
@@ -101,7 +103,7 @@ public class ClassFileWrapper extends ClassFile {
         String accessFlagsHex = HexUtils.byteArrayToHex(super.accessFlags);
         this.accessFlagsNumber = Integer.parseInt(accessFlagsHex, 16);
         index += accessFlagsLength;
-        // 解析 访问标识 thisClass
+        // 解析 thisClass
         int thisClassLength = 2;
         byte[] thisClassBytes = new byte[thisClassLength];
         System.arraycopy(rawContent, index, thisClassBytes, 0, thisClassLength);
@@ -109,6 +111,23 @@ public class ClassFileWrapper extends ClassFile {
         String thisClassHex = HexUtils.byteArrayToHex(super.thisClass);
         this.thisClassIndex = Integer.parseInt(thisClassHex, 16);
         index += thisClassLength;
+        // 解析 superClass
+        int superClassLength = 2;
+        byte[] superClassBytes = new byte[superClassLength];
+        System.arraycopy(rawContent, index, superClassBytes, 0, superClassLength);
+        super.superClass = superClassBytes;
+        String superClassHex = HexUtils.byteArrayToHex(super.superClass);
+        this.superClassIndex = Integer.parseInt(superClassHex, 16);
+        index += superClassLength;
+        //
+        // 解析 interfacesCount
+        int interfacesCountLength = 2;
+        byte[] interfacesCountBytes = new byte[interfacesCountLength];
+        System.arraycopy(rawContent, index, interfacesCountBytes, 0, interfacesCountLength);
+        super.interfacesCount = interfacesCountBytes;
+        String interfacesCountHex = HexUtils.byteArrayToHex(super.interfacesCount);
+        this.interfacesCount = Integer.parseInt(interfacesCountHex, 16);
+        index += interfacesCountLength;
 
     }
 
@@ -487,11 +506,13 @@ public class ClassFileWrapper extends ClassFile {
                 indent1 + ",minorVersionNumber: " + minorVersionNumber +
                 indent1 + ",majorVersionNumber: " + majorVersionNumber +
                 indent1 + ",constantPoolCountNumber: " + constantPoolCountNumber +
-                indent1 + ",constantPoolList: " + "[" +
+                indent1 + ",constantPoolList: " + "[{}," +
                 _constantPoolListToString("\n\t\t") +
                 indent1 + "]" +
                 indent1 + ",accessFlags: " + "\"" + AccessFlagsEnum.parseAccessFlags(accessFlagsNumber) + "\"" +
                 indent1 + ",thisClassIndex: " + thisClassIndex +
+                indent1 + ",superClassIndex: " + superClassIndex +
+                indent1 + ",interfacesCount: " + interfacesCount +
                 "\n}";
     }
 
