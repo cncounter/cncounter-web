@@ -25,7 +25,7 @@ public class ConstantItem {
         return size;
     }
 
-    public String toString(String indent) {
+    public String toJSONString(String indent) {
         return indent + "{" +
                 indent + "\ttag:" + Integer.parseInt(HexUtils.byteArrayToHex(tag), 16) + "," +
                 indent + "\ttagEnum:" + "\"" + tagEnum.name() + "\"" + "," +

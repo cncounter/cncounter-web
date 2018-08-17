@@ -31,10 +31,13 @@ public class ClassFileWrapper extends ClassFile {
     public Integer interfacesCount;// 实现的interface数量
     public Integer fieldsCountNumber;// fields 数量
     public Integer methodsCountNumber;// methods 数量
+    public Integer attributesCountNumber;// methods 数量
 
     public List<ConstantItem> constantPoolList;// 常量池
     public List<Integer> interfacesIndexList;// 实现的interfaces列表
     public List<FieldInfo> fieldInfoList;//  fieldInfo 列表
+    public List<MethodInfo> methodInfoList;//  methodInfo 列表
+    public List<AttributeInfo> attributeInfoList; // attributeInfo 列表
 
     public ClassFileWrapper(byte[] rawContent) {
         this.rawContent = rawContent;
@@ -182,7 +185,7 @@ public class ClassFileWrapper extends ClassFile {
             //
             index += fieldInfo.getSize();
         }
-        if(!fieldInfoList.isEmpty()){
+        if (!fieldInfoList.isEmpty()) {
             this.fieldInfoList = fieldInfoList;
         }
         //
@@ -203,6 +206,76 @@ public class ClassFileWrapper extends ClassFile {
         this.methodsCountNumber = Integer.parseInt(methodsCountHex, 16);
         index += methodsCountLength;
         //
+
+        //
+        int methodsStartIndex = index;
+        List<MethodInfo> methodInfoList = new ArrayList<MethodInfo>();
+        // 解析 methods
+        for (int i = 0; i < this.methodsCountNumber; i++) {
+            //
+            MethodInfo methodInfo = parseMethodInfo(rawContent, index);
+            if (null == methodInfo) {
+                throw new RuntimeException("methodInfo 不能为null; index=" + index);
+            }
+            //
+            methodInfoList.add(methodInfo);
+            //
+            index += methodInfo.getSize();
+        }
+        if (!methodInfoList.isEmpty()) {
+            this.methodInfoList = methodInfoList;
+        }
+        //
+        int methodsEndIndex = index;
+        // methods 索引长度
+        int methodsLength = methodsEndIndex - methodsStartIndex;
+        byte[] methodsBytes = new byte[methodsLength];
+        System.arraycopy(rawContent, methodsStartIndex, methodsBytes, 0, methodsLength);
+        super.methods = methodsBytes;
+
+        //
+        // 解析 attributesCount
+        int attributesCountLength = 2;
+        byte[] attributesCountBytes = new byte[attributesCountLength];
+        System.arraycopy(rawContent, index, attributesCountBytes, 0, attributesCountLength);
+        super.attributesCount = attributesCountBytes;
+        String attributesCountHex = HexUtils.byteArrayToHex(super.attributesCount);
+        this.attributesCountNumber = Integer.parseInt(attributesCountHex, 16);
+        index += attributesCountLength;
+        //
+        int attributesStartIndex = index;
+        //
+        List<AttributeInfo> attributeInfoList = new ArrayList<AttributeInfo>();
+        //
+        for (int i = 0; i < this.attributesCountNumber; i++) {
+            //
+            AttributeInfo attributeInfo = parseAttributeInfo(rawContent, index);
+            if (null == attributeInfo) {
+                throw new RuntimeException("attributeInfo不能为null; index=" + index);
+            }
+            //
+            attributeInfoList.add(attributeInfo);
+            //
+            index += attributeInfo.getSize();
+        }
+        if (!attributeInfoList.isEmpty()) {
+            this.attributeInfoList = attributeInfoList;
+        }
+        //
+        int attributesEndIndex = index;
+        // attributes 索引长度
+        int attributesLength = attributesEndIndex - attributesStartIndex;
+        byte[] attributesBytes = new byte[attributesLength];
+        System.arraycopy(rawContent, attributesStartIndex, attributesBytes, 0, attributesLength);
+        super.attributes = attributesBytes;
+        // 比对 index
+        if(rawContent.length != index){
+            System.err.println("====================Error");
+            System.err.println("rawContent.length=" + rawContent.length);
+            System.err.println("index=" + index);
+            System.err.println("====================");
+        }
+
 
     }
 
@@ -629,7 +702,7 @@ public class ClassFileWrapper extends ClassFile {
             //
             index += attributeInfo.getSize();
         }
-        if(!attributeInfoList.isEmpty()){
+        if (!attributeInfoList.isEmpty()) {
             fieldInfo.attributeInfoList = attributeInfoList;
         }
         //
@@ -642,6 +715,78 @@ public class ClassFileWrapper extends ClassFile {
 
         //
         return fieldInfo;
+    }
+
+    public MethodInfo parseMethodInfo(byte[] rawContent, final int startIndex) {
+        //
+        MethodInfo methodInfo = new MethodInfo();
+        //
+        int index = startIndex;
+
+        // 解析 accessFlags
+        int accessFlagsLength = 2;
+        byte[] accessFlagsBytes = new byte[accessFlagsLength];
+        System.arraycopy(rawContent, index, accessFlagsBytes, 0, accessFlagsLength);
+        methodInfo.accessFlags = accessFlagsBytes;
+        String accessFlagsHex = HexUtils.byteArrayToHex(methodInfo.accessFlags);
+        methodInfo.accessFlagsNumber = Integer.parseInt(accessFlagsHex, 16);
+        index += accessFlagsLength;
+
+        // 解析 nameIndex
+        int nameIndexLength = 2;
+        byte[] nameIndexBytes = new byte[nameIndexLength];
+        System.arraycopy(rawContent, index, nameIndexBytes, 0, nameIndexLength);
+        methodInfo.nameIndex = nameIndexBytes;
+        String nameIndexHex = HexUtils.byteArrayToHex(methodInfo.nameIndex);
+        methodInfo.nameIndexNumber = Integer.parseInt(nameIndexHex, 16);
+        index += nameIndexLength;
+
+        // 解析 descriptorIndex
+        int descriptorIndexLength = 2;
+        byte[] descriptorIndexBytes = new byte[descriptorIndexLength];
+        System.arraycopy(rawContent, index, descriptorIndexBytes, 0, descriptorIndexLength);
+        methodInfo.descriptorIndex = descriptorIndexBytes;
+        String descriptorIndexHex = HexUtils.byteArrayToHex(methodInfo.descriptorIndex);
+        methodInfo.descriptorIndexNumber = Integer.parseInt(descriptorIndexHex, 16);
+        index += descriptorIndexLength;
+
+        // 解析 attributesCount
+        int attributesCountLength = 2;
+        byte[] attributesCountBytes = new byte[attributesCountLength];
+        System.arraycopy(rawContent, index, attributesCountBytes, 0, attributesCountLength);
+        methodInfo.attributesCount = attributesCountBytes;
+        String attributesCountHex = HexUtils.byteArrayToHex(methodInfo.attributesCount);
+        methodInfo.attributesCountNumber = Integer.parseInt(attributesCountHex, 16);
+        index += attributesCountLength;
+        //
+        int attributesStartIndex = index;
+        //
+        List<AttributeInfo> attributeInfoList = new ArrayList<AttributeInfo>();
+        //
+        for (int i = 0; i < methodInfo.attributesCountNumber; i++) {
+            //
+            AttributeInfo attributeInfo = parseAttributeInfo(rawContent, index);
+            if (null == attributeInfo) {
+                throw new RuntimeException("attributeInfo不能为null; index=" + index);
+            }
+            //
+            attributeInfoList.add(attributeInfo);
+            //
+            index += attributeInfo.getSize();
+        }
+        if (!attributeInfoList.isEmpty()) {
+            methodInfo.attributeInfoList = attributeInfoList;
+        }
+        //
+        int attributesEndIndex = index;
+        // attributes 索引长度
+        int attributesLength = attributesEndIndex - attributesStartIndex;
+        byte[] attributesBytes = new byte[attributesLength];
+        System.arraycopy(rawContent, attributesStartIndex, attributesBytes, 0, attributesLength);
+        methodInfo.attributes = attributesBytes;
+
+        //
+        return methodInfo;
     }
 
     private AttributeInfo parseAttributeInfo(byte[] rawContent, int index) {
@@ -679,6 +824,10 @@ public class ClassFileWrapper extends ClassFile {
 
     @Override
     public String toString() {
+        return toJSONString();
+    }
+
+    public String toJSONString() {
         //
         final String indent1 = "\n\t";
         //
@@ -714,7 +863,7 @@ public class ClassFileWrapper extends ClassFile {
             } else if (!result.isEmpty()) {
                 result += ",";
             }
-            result += item.toString(indent);
+            result += item.toJSONString(indent);
         }
 
         //
