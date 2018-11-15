@@ -25,7 +25,7 @@ public enum AccessFlagsEnum {
     ACC_STRICT(0x0800, "strict", "method"),
     // 由编译器自动生成-标记
     ACC_SYNTHETIC(0x1000, "<synthetic>", "class|field|method"),
-    ACC_ANNOTATION(0x2000, "@interface", "class"), //; Class
+    ACC_ANNOTATION(0x2000, "@", "class"), //; Class; 同时需要指定 ACC_INTERFACE
     ACC_ENUM(0x4000, "enum", "class|field");
 
     // 由谁使用
