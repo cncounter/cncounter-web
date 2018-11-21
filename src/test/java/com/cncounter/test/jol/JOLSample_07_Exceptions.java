@@ -21,7 +21,9 @@ public class JOLSample_07_Exceptions {
      */
 
     public static void main(String[] args) throws Exception {
+        System.out.println("====================================");
         System.out.println(VM.current().details());
+        System.out.println("====================================");
         System.out.println(ClassLayout.parseClass(Throwable.class).toPrintable());
     }
 
