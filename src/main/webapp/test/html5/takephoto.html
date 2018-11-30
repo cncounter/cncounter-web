@@ -12,6 +12,62 @@
             font-size: 16px;
         }
     </style>
+    
+    <script>
+        // 测试是否支持拍照
+        function testCameraSecurity(){
+            //
+            var protocol_http = "http:";
+            var protocol_https = "https:";
+            var hostname_localhost = "localhost";
+            var hostname_127 = "127.0.0.1";
+            //
+            var href = location.href;
+            var hostname = location.hostname;
+            var protocol = location.protocol;
+            //
+            var result = {
+                unSupport : false, // 不支持
+                unSafe : false,    // 不安全
+                protocol : protocol,
+                hostname : hostname,
+                targetUrl : href
+            };
+            // 浏览器不支持!
+            if(!window.navigator || !window.navigator.getUserMedia){
+                result.unSupport = true;
+                return result;
+            }
+            // file协议和https协议都不受拦截;
+			//
+            if(protocol_http == protocol){
+                //
+                if(hostname_localhost == hostname || hostname_127 == hostname){
+                    // localhost和127也不受拦截.
+                    return result;
+                } else {
+                    // 其他的 http 域名不安全。不受支持;
+                    var httpsHref = href.replace(protocol_http, protocol_https);
+                    //
+                    result.unSafe = true;
+                    result.targetUrl = httpsHref;
+                    return result;
+                }
+            }
+            //
+            return result;
+        };
+        // 测试
+        var result = testCameraSecurity();
+        if(result.unSupport){
+            window.alert("浏览器不支持拍照!");
+        } else if(result.unSafe){
+            var cfmFlag = window.confirm("["+result.protocol+"//"+result.hostname+"]受到安全限制,是否跳转到https?");
+            if(cfmFlag){
+                window.location.replace(result.targetUrl);
+            }
+        }
+    </script>
 </head>
 
 <body>
