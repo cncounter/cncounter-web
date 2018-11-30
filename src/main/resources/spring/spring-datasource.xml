@@ -18,6 +18,7 @@
 	<!-- 配置Druid数据源 -->
 	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
+        <property name="name" value="MySQLDataSource"/>
 		<!-- 基本属性 url、user、password -->
 		<property name="url" value="${url}" />
 		<!-- 渣渣,这里value直接是 ${username} 会搞成操作系统用户,Spring在搞毛线 -->
