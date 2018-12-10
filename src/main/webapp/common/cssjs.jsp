@@ -3,7 +3,14 @@
 <%@include file="basePath.jsp"%>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- 对于国内双核浏览器强制使用Webkit内核渲染页面 -->
+	<!-- 360 6.X 以上可识别 -->
+	<meta name="renderer" content="webkit">
+	<!-- 其他双核可识别-->
+	<meta name="force-rendering" content="webkit">
+	<!-- 对于没有自带 IE7 内核的浏览器 强制使用用户已安装的最高版本浏览器渲染, 有Chrome框架的优先使用-->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<!-- 手机浏览器自适应宽度 -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link href="<%=basePath %>static/image/favicon.ico" rel="bookmark" type="image/x-icon" /> 
