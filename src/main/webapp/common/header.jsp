@@ -14,7 +14,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="http:<%=basePath %>">CN计数器</a>
+          <a class="navbar-brand" href="http:<%=basePath %>">性能计数器</a>
         </div>
         
         <div id="navbar" class="collapse navbar-collapse">

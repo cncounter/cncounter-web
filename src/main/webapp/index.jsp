@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<title>CN计数器 - CNCounter</title>
+	<title>性能计数器 - CNCounter</title>
     <meta property="qc:admins" content="515131327763637564526375" />
 	<jsp:include page="/common/cssjs.jsp"></jsp:include>
 </head>
@@ -11,7 +11,7 @@
 	<jsp:include page="/common/header.jsp"></jsp:include>
 	<div class="container-fluid">
 		<div class="content_left">
-			<p class="h1">CN计数器</p>
+			<p class="h1">性能计数器</p>
 			<h2>
 				<a target="_blank" href="https://github.com/cncounter/cncounter-web">GitHub项目首页</a>
 			</h2>
