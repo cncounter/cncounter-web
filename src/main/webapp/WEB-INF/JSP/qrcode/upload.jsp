@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<title>二维码图片在线识别 - CN计数-cncounter</title>
+	<title>二维码图片在线识别 - 性能计数器-cncounter</title>
 	<jsp:include page="/common/cssjs.jsp"></jsp:include>
 	<%-- jquery.fileupload-lib--%>
 	<script src="<%=basePath %>static/jquery.fileupload/js/vendor/jquery.ui.widget.js"></script>

@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <title>CNC短网址 - CN计数-cncounter</title>
+    <title>CNC短网址 - 性能计数器-cncounter</title>
     <jsp:include page="/common/cssjs.jsp"></jsp:include>
 </head>
 <body>

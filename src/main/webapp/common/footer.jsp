@@ -8,7 +8,7 @@
     <footer class="footer">
         <hr/>
         <div class="container col-center-block" id="info">
-            CN计数 | cncounter |
+            性能计数器 | cncounter |
             <a target="_blank" href="<%=path %>/test/index.jsp">&copy;</a>
             2014 - <%=f_year %>
             |

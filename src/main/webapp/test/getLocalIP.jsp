@@ -37,7 +37,7 @@
 	<jsp:include page="/common/header.jsp"></jsp:include>
 	<div class="container-fluid">
 		<div class="content_left">
-			<p class="h1">获取局域网IP-LAN  - CN计数</p>
+			<p class="h1">获取局域网IP-LAN  - 性能计数器</p>
             <%
                 String clientIp = IPUtils.getClientIp(request);
             %>

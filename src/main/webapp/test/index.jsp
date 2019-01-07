@@ -10,7 +10,7 @@
 	<jsp:include page="/common/header.jsp"></jsp:include>
 	<div class="container-fluid">
 		<div class="content_left">
-			<p class="h1">测试  - CN计数</p>
+			<p class="h1">测试  - 性能计数器</p>
 			<h2>
 				<a target="_self" href="/tools/translation.php">Markdown文章翻译</a>
 			</h2>
