@@ -5,9 +5,14 @@ import java.util.Random;
 
 /**
  * 最近在看《算法图解》;
- * 测试-选择排序;
+ * 测试-选择排序:  每次选择最小/最大的一个数字;
  * 只处理 int[];
  * Java中- Arrays提供了对应的方法;
+ *
+ * 选择排序的时间复杂度(N为规模, c为常数因子):
+ * = N +(N-1) + (N-2) +...+1
+ * = c * (N*(N+1))/2
+ * = O(N^2)
  */
 public class TestSelectionSort {
     public static void main(String[] args) {
