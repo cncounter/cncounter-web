@@ -2,6 +2,7 @@ package com.cncounter.test.algorithm;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 最近在看《算法图解》;
@@ -17,14 +18,14 @@ import java.util.Random;
 public class TestSelectionSort {
     public static void main(String[] args) {
         //
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 40; i++) {
             test();
         }
     }
 
     public static void test() {
         //
-        int length = 10;
+        int length = 20;
         boolean descFlag = false;
         // 基准数组
         int[] baseArray = generateSourceArray(length, 100 * length);
@@ -35,9 +36,10 @@ public class TestSelectionSort {
         System.out.println("===========-----------------============");
         System.out.println("BB=====" + Arrays.toString(sourceArray));
         // 排序
-        selectionSort(sourceArray, descFlag);
+        int findTimes =selectionSort(sourceArray, descFlag);
         // 排序后
         System.out.println("AA=====" + Arrays.toString(sourceArray));
+        System.out.println("findTimes=" + findTimes);
         // 此处, 可以实现一个自动比较的方法; assert(sourceArray, descFlag);
 
         // 使用JDK自带的排序方法
@@ -59,16 +61,19 @@ public class TestSelectionSort {
         return sourceArray;
     }
 
+    // 单线程计数器
+    public static AtomicInteger counter = new AtomicInteger(0);
     /**
      * @param sourceArray 源数组
      * @param descFlag    是否降序
      * @return
      */
-    public static void selectionSort(int[] sourceArray, boolean descFlag) {
+    public static int selectionSort(int[] sourceArray, boolean descFlag) {
         // 防御式编程
         if (null == sourceArray || sourceArray.length < 2) {
-            return;
+            return 0;
         }
+        counter.set(0);
         // 数组长度
         int sourceLength = sourceArray.length;
         // 双层循环
@@ -78,8 +83,7 @@ public class TestSelectionSort {
             // 交换2个索引处的值
             swapArrayValue(sourceArray, i, theIndex);
         }
-        //
-        return;
+        return counter.getAndSet(0);
     }
 
     // 找出目标值
@@ -111,6 +115,7 @@ public class TestSelectionSort {
                     theValue = sourceArray[theIndex];
                 }
             }
+            counter.incrementAndGet();
         }
         //
         return theIndex;
