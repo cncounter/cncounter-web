@@ -79,13 +79,13 @@
                 <br/>
 
             </h1>
-            <h1>
+            <h1 style="display: none;">
                 新浪查询接口: <a target="_blank" href="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js">http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js</a><br/>
                 <br/>
                 新浪返回结果: <span class="sina-ip-result"></span>
-                <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
+                <script _src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
                 <script>
-                    $(function(){
+                    /*$(function(){
                         var sinaIpResult = $(".sina-ip-result");
                         if(window.remote_ip_info){
                             //
@@ -101,7 +101,7 @@
                             //
                             sinaIpResult.text(text);
                         }
-                    });
+                    });*/
                 </script>
                 <br/>
 
