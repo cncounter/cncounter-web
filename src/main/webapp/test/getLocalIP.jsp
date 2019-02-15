@@ -37,7 +37,7 @@
 	<jsp:include page="/common/header.jsp"></jsp:include>
 	<div class="container-fluid">
 		<div class="content_left">
-			<p class="h1">获取局域网IP-LAN  - CN计数</p>
+			<p class="h1">获取局域网IP-LAN  - 性能计数器</p>
             <%
                 String clientIp = IPUtils.getClientIp(request);
             %>
@@ -72,6 +72,8 @@
                 查询IP地址: <a target="_blank" href="http://www.ip138.com/">http://www.ip138.com/</a><br/>
                 <br/>
                 本站查询接口: <a target="_blank" href="../tools/api/jsonp/ip.json?callback=getip&ip=<%=clientIp%>">Jsonp-查询IP</a><br/>
+                <br/>
+                运营商查询: <a target="_blank" href="http://freeapi.ipip.net/<%=clientIp%>">http://freeapi.ipip.net/<%=clientIp%></a><br/>
                 <br/>
                 感谢: <a target="_blank" href="https://www.ipip.net/">https://www.ipip.net/</a><br/>
                 <br/>

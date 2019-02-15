@@ -1,77 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<configuration>
-
-    <!--属性区-->
+<!--
+    scan:       当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
+    scanPeriod: 设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。
+                当scan为true时，此属性生效。默认的时间间隔为1分钟。
+    debug:      设置为true时，打印logback内部日志，实时查看logback运行状态。默认false。
+    configuration: 子节点为 appender、logger、root
+-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 用于区分不同应用程序的记录 -->
+    <contextName>cnc_web</contextName>
+    <!--属性配置-->
+    <property name="appName" value="cnc_web"></property>
     <property name="logBase" value="/usr/local/cncounter_webapp/logs/" />
 
     <!--console输出-->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder charset="UTF-8">
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss} %5p %c:%L %X{msgId}] %m%n</pattern>
-        </encoder>
-    </appender>
-
-    <!--info 文件输出-->
-    <appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 按日期区分的滚动日志 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logBase}/cnc_web_info.%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>3</maxHistory>
-        </rollingPolicy>
+        <!--
+        格式化输出：%d表示日期; %thread表示线程名，
+        %-5level：级别从左显示5个字符宽度
+        %logger输出日志的logger名; %msg：日志消息; %n是换行符
+        -->
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36}[%L] - %msg%n
-            </pattern>
+            <charset>GBK</charset>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %-5level %logger{36} : %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!--error 文件输出-->
-    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 按日期区分的滚动日志 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logBase}/cnc_web_error.%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>3</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36}[%L] - %msg%n
-            </pattern>
-        </encoder>
-    </appender>
-
-
-    <!--针对 INFO 级别的日志进行过滤,并输出到 info 文件中-->
-    <appender name="async-info" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="info" />
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-    </appender>
-
-    <!--针对 ERROR 级别的日志进行过滤,并输出到 error 文件中-->
-    <appender name="async-error" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="error"/>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>ERROR</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-    </appender>
-
-    <!--针对 WARN 级别的日志进行过滤,并输出到 error 文件中-->
-    <appender name="async-warn" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="error"/>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>WARN</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-    </appender>
-
-    <appender name="monitor" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--滚动文件-->
+    <appender name="infoFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- ThresholdFilter:临界值过滤器，过滤掉 TRACE 和 DEBUG 级别的日志 -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logBase}/${appName}.info.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory><!--保存最近30天的日志-->
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %-5level %logger{36} : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--滚动文件-->
+    <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- ThresholdFilter:临界值过滤器，过滤掉 TRACE 和 DEBUG 级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logBase}/${appName}.error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory><!--保存最近30天的日志-->
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %-5level %logger{36} : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 监控 -->
+    <appender name="monitorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>ACCEPT</onMismatch>
         </filter>
@@ -80,35 +70,32 @@
             </pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logBase}/cnc_web_monitor.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>${logBase}/${appName}.monitor.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>3</maxHistory>
         </rollingPolicy>
     </appender>
 
-    <!-- additivity="false"禁止monitor里的内容向上传递，否则会同时显示在默认的日志中 -->
+    <!-- additivity="false"; 这样只会交给 monitor 这个appender; 否则会打印到默认的日志中 -->
     <logger name="monitor" additivity="false" level="INFO">
-        <appender-ref ref="monitor" />
+        <appender-ref ref="monitorFile" />
     </logger>
 
-    <logger name="org.springframework" level="WARN" />
-    <logger name="org.apache.shiro" level="WARN" />
-    <logger name="org.mybatis" level="WARN" />
-    <logger name="org.springframework.web" level="WARN" />
-    <logger name="com.cncounter" level="DEBUG" />
-
-
+    <!-- 为某个包单独配置logger -->
     <!--针对不同的包设置不同的级别-->
     <logger name="org.apache" level="INFO" />
-    <logger name="org.springframework" level="INFO" />
+    <logger name="org.apache.shiro" level="WARN" />
+    <logger name="org.springframework" level="WARN" />
+    <logger name="org.springframework.web" level="WARN" />
+    <logger name="org.mybatis" level="WARN" />
 
+    <logger name="com.cncounter" level="DEBUG" />
 
     <!--总的配置,默认将级别设定在info-->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="stdout" />
-        <appender-ref ref="async-info"/>
-        <appender-ref ref="async-warn"/>
-        <appender-ref ref="async-error"/>
+        <appender-ref ref="infoFile"/>
+        <appender-ref ref="errorFile"/>
     </root>
 
-
 </configuration>
+<!-- 参考: https://www.jianshu.com/p/696444e1a352 -->

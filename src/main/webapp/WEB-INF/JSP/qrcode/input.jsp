@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<title>二维码生成 - CN计数-cncounter</title>
+	<title>二维码生成 - 性能计数器-cncounter</title>
 	<jsp:include page="/common/cssjs.jsp"></jsp:include>
 </head>
 <body>

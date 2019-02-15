@@ -4,7 +4,7 @@
     <groupId>com.cncounter</groupId>
     <artifactId>cncounter-web</artifactId>
     <packaging>war</packaging>
-    <version>1.0.1.180125.RELEASE</version>
+    <version>1.0.2.190109.RELEASE</version>
     <name>cncounter-web</name>
     <url>http://www.cncounter.com</url>
 
@@ -17,11 +17,7 @@
     </developers>
 
     <properties>
-        <junit.version>4.11</junit.version>
         <httpclient.version>4.4.1</httpclient.version>
-
-        <log4j.version>1.2.16</log4j.version>
-        <servlet.api.version>2.5</servlet.api.version>
 
         <spring.version>4.0.7.RELEASE</spring.version>
         <spring.data.redis.version>1.4.0.RELEASE</spring.data.redis.version>
@@ -29,23 +25,24 @@
         <spring.session.version>1.3.1.RELEASE</spring.session.version>
 
         <mybatis.version>3.2.7</mybatis.version>
-        <pagehelper.version>3.6.4</pagehelper.version>
         <mybatis-spring.version>1.2.2</mybatis-spring.version>
         <mysql.jdbc.version>5.1.30</mysql.jdbc.version>
         <druid.version>1.1.12</druid.version>
         <fastjson.version>1.2.54</fastjson.version>
-        <jackson.databind.version>2.2.2</jackson.databind.version>
         <org.aspectj.version>1.8.4</org.aspectj.version>
 
         <slf4j.version>1.7.21</slf4j.version>
         <logback.version>1.1.7</logback.version>
 
+        <junit.version>4.11</junit.version>
+
+        <jdk.version>1.6</jdk.version>
+
+        <servlet.api.version>2.5</servlet.api.version>
 
         <gpg.skip>true</gpg.skip>
         <javadoc.skip>true</javadoc.skip>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.6</jdk.version>
     </properties>
 
     <profiles>
@@ -130,6 +127,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -240,12 +243,6 @@
             <version>${httpclient.version}</version>
         </dependency>
 
-        <!-- log4j2 -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
         <!-- slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -259,6 +256,7 @@
             <scope>runtime</scope>
         </dependency>
         <!-- log4j-over-slf4j: 基于slf4j的log4j类,避免 druid 等报错 -->
+        <!-- 如果有直接使用log4j的组件，也要将log4j排除掉，同时添加log4j-over-slf4 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
