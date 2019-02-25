@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@page import="com.cncounter.test.duapp.TestMySQLConnection"%>
 <!DOCTYPE html>
 <html>
 <head>

@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 演示 volatile 关键字与 Atomic类的使用
+
+ volatile要求程序对变量的每次修改，都写回主内存，这样便对其它线程课件，解决了可见性的问题，但是不能保证数据的一致性
+
  */
 public class TestVolatileAtomic {
     //
