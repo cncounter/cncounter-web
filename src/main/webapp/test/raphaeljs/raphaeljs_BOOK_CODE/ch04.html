@@ -9,7 +9,9 @@
         <script>
 // Raphael(container, width. height, callback) or ...
 var paper = Raphael(0,0,300,300);
-var d = "M10 30L60 30L10 80L60 80z";
+// var d = "M10 30L60 30L10 80L60 80z";
+// var d = "M10,30 l50,0 l-50,50 l50,0";
+var d = "M10,30h50l-50,50H60";
 var mark = paper.path(d);
 
 /*mark.attr({
