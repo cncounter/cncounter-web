@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ch04 - path</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script>
+// Raphael(container, width. height, callback) or ...
+var paper = Raphael(0,0,300,300);
+var d = "M 10,30 L 60,30 L 10,80 L 60,80";
+var mark = paper.path(d);
+
+mark.attr({
+    "stroke": "#F00",
+    "stroke-width": 3
+});
+
+mark.attr("fill", "#00C");		
+		
+		</script>
+    </body>
+</html>

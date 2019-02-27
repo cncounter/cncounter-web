@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ch02-shapes-set</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script>
+// Raphael(container, width. height, callback) or ...
+// Raphael(x, y , width. height, callback) or ...
+// Paper.rect(x, y, width, height, [r])
+// Paper.circle(x, y, r)
+// Paper.text(x, y, text)
+
+var paper = Raphael(0, 0, 500, 500);
+
+//red row
+var r1 = paper.rect(25, 25, 50, 50);
+var r2 = paper.circle(125, 50, 25);
+var r3 = paper.text(200, 50, "H").attr("font-size", "60px");
+
+var g1 = paper.rect(100, 100, 50, 50);
+var g2 = paper.circle(200, 125, 25);
+var g3 = paper.text(50, 125, "H").attr("font-size", "60px");
+
+var b1 = paper.rect(175, 175, 50, 50);
+var b2 = paper.circle(50, 200, 25);
+var b3 = paper.text(125, 200, "?").attr("font-size", "60px");
+
+var red_group = paper.set();
+red_group.push(r1, r2, r3);
+red_group.attr("fill", "red");
+
+var green_group = paper.set(g1, g2, g3);
+green_group.attr("fill", "green");
+
+var blue_group = paper.set(b1, b2, b3).attr("fill", "blue");
+
+b3.attr("fill", "gray");
+
+//
+window.setTimeout(function(){
+    var text_group = paper.set(r3, g3, b3).attr("font-size", 40);
+	// add to group
+	red_group.push(paper.rect(300, 25, 50, 50));
+}, 1000);
+
+
+window.setTimeout(function(){
+	var text_group = paper.set(r3, g3, b3).attr("font-size", 65);
+	var all_groups = paper.set(red_group, blue_group, green_group).attr("stroke-width", 0);
+	
+	window.setTimeout(function(){
+		//loop through the all_groups set
+		for (var c = 0; c < all_groups.length; c += 1) {
+			// loop through the child sets (red_group, blue_group, green_group)
+			for (var i = 0; i < all_groups[c].length; i += 1) {
+				all_groups[c][i].attr("x",  all_groups[c][i].attr("x") + 150);
+			}
+		}
+	}, 1000);
+	window.setTimeout(function(){
+	    all_groups.attr("transform", "T150,0");
+	}, 2000);
+}, 2000);
+
+
+		
+
+		</script>
+    </body>
+</html>

@@ -1,7 +1,7 @@
 
 
 // 边界
-var lineArray=[
+var boundaryLineArray=[
 [
 {x:180, y:20},
 {x:300, y:20},
@@ -40,6 +40,17 @@ var lineArray=[
 
 ];
 
+// 温度坐标
+var temperatureCoArray=[
+{
+  text : '13',
+  addr : [
+      {x: 100, y:100},
+      {x: 100, y:100},
+  ]
+},
+];
+
 //
 function lineToPathArray(line){
 		if(!line){return null;}
@@ -74,8 +85,8 @@ function toDrawSvgImage(){
 	var paper = Raphael.apply(window, rectValue);
 	// 将坐标转为 path;
 	var pArray = [];
-	for(var i=0; i<lineArray.length;i++){
-		var line = lineArray[i];
+	for(var i=0; i<boundaryLineArray.length;i++){
+		var line = boundaryLineArray[i];
 		if(!line){continue;}
 		//
 		var linePathObj =lineToPathArray(line);

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ch02-shapes</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script>
+// Raphael(container, width. height, callback) or ...
+var paper = Raphael("container", 1000, 800);
+// Paper.circle(x, y, r)
+var dot = paper.circle(250, 150, 50);
+dot.attr("fill", "red");
+dot.attr("stroke", "blue");
+dot.attr("stroke-width", 3);
+
+// Paper.ellipse(x, y, rx, ry)
+var ell = paper.ellipse(400, 100, 50, 20);
+ell.attr("fill", "orange");
+
+// Paper.rect(x, y, width, height, [r])
+var rec = paper.rect(400, 100, 50, 20);
+rec.attr("fill", "green");
+
+// Paper.image(src, x, y, width, height)
+var fluffy = paper.image("ch02_avatar.jpg", 400, 140, 120, 100);
+
+// Paper.text(x, y, text)
+var goodnews = paper.text(200, 320, "I bought five copies of RaphaelJS!").attr("font-size", 16);
+var rec2 = paper.rect(200, 340, 100, 5).attr({ fill: "#CCF", "stroke-width": 0 });
+
+//
+var rec3 = paper.rect(200, 380, 100, 5).attr({ fill: "#CCF", "stroke-width": 0 });
+var message = "I bought TEN copies of RaphaelJS!"
+var betternews = paper.text(200, 360, message).attr({
+    "text-anchor": "start",
+    "font-size": 12, //in pixels
+    "font-family": "Courier New"
+});
+console.log("betternews.x:",betternews.attr("x"),"; betternews.y:",betternews.attr("y"));
+window.setTimeout(function(){
+    rec3.attr("x", 300);
+    rec3.attr("y", 340);
+}, 2000);
+
+//
+var r1 = paper.rect(520, 20, 80, 40).attr("fill", "red");
+var r2 = paper.rect(600, 20, 80, 40).attr("fill", "blue");
+var r3 = paper.rect(680, 20, 80, 40).attr("fill", "green");
+//
+window.setTimeout(function(){
+    // R=rotate; 默认中心点旋转
+    r2.attr("transform", "R45");
+	window.setTimeout(function(){
+	    // S=scaling 
+        r2.attr("transform", "S0.8,0.5");
+		
+	}, 1500);
+
+}, 1000);
+//
+window.setTimeout(function(){
+    // T=translation
+    r1.attr("transform", "T50,60");
+	console.log('T50,60: r1.x=', r1.attr("x"));
+	window.setTimeout(function(){
+		//
+		r1.attr("transform", "");
+	}, 1500);
+}, 1500);
+//
+window.setTimeout(function(){
+    // R=rotate,指定转轴点的xy
+    r3.attr("transform", "R90,680,60");
+}, 2000);
+
+
+		
+		
+		</script>
+    </body>
+</html>
