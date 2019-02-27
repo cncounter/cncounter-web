@@ -13,6 +13,20 @@ var paper = Raphael(0,0,300,300);
 // var d = "M10,30 l50,0 l-50,50 l50,0";
 var d = "M10,30h50l-50,50H60";
 var mark = paper.path(d);
+//
+var I = paper.path("M140,30h30m-15,0v50m-15,0h30");
+
+var d = "M90,190l-80,-20L50,105L90,190";
+//var tri = paper.path(d);
+
+var tri = paper.path([["M", 90, 190], ["L", 10, 170], ["L", 50, 105], ["L", 90, 190]]);
+
+tri.attr({
+    "fill": "yellow",
+    "stroke-width": 5
+});
+console.dir(tri);
+console.dir(tri.attrs.path);
 
 /*mark.attr({
     "stroke": "#F00",
