@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ch04 - cubic</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script>
+var paper = Raphael(0,0,500,500);
+//
+var c1x = 100, c1y=150, c2x=200, c2y=150;
+
+// draw the control points for educational purposes
+//var cp1 = paper.circle(c1x, c1y, 4).attr("fill", "black");
+//var cp2 = paper.circle(c2x, c2y, 4).attr("fill", "black");
+
+// draw the bezier curve
+var path = "M 50,100 C "+c1x+","+c1y+" "+c2x+","+ c2y+" 250,100";
+//paper.path(path);
+
+var path2 = "M 50,100 C 50,50 300,250 250,100";
+var cp1 = paper.circle(50, 50, 4).attr("fill", "black");
+var cp2 = paper.circle(300, 250, 4).attr("fill", "black");
+paper.path(path2);
+		</script>
+    </body>
+</html>
