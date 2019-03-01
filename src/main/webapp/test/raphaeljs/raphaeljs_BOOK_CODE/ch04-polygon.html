@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ch04 - polygon</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script>
+// 多边形(x,y, 边数N，边长side|r)
+function NGon(x, y, N, side) {
+    // 为了好理解, 在中心画一个圆点
+    paper.circle(x, y, 3).attr("fill", "black");
+
+    var path = "", n, temp_x, temp_y, angle;
+    // N+1个点; 保证封闭(0-N)
+    for (n = 0; n <= N; n += 1) {
+        // 把一个圆(360度)N等分，每条边对应的角度, 依次往右加 1/N. 
+	// 类似-时钟-顺时针-60等分；
+	// angle(角度), 使用弧度(radians)表示法;
+        angle = n / N * 2 * Math.PI;
+        // x + side(半径)*三角函数cos
+        temp_x = x + Math.cos(angle) * side;
+        // y + side(半径)*三角函数sin
+        temp_y = y + Math.sin(angle) * side;
+
+        // 第0个点是 "M", 后面的是 L
+        path += (n === 0 ? "M" : "L") + temp_x + "," + temp_y;
+    }
+    return path;
+}
+
+var paper = Raphael(0, 0, 800, 600);
+
+paper.path(NGon(40, 40, 6, 30));
+paper.path(NGon(40, 120, 4, 30));
+paper.path(NGon(40, 200, 5, 30));
+paper.path(NGon(130, 60, 9, 40));
+paper.path(NGon(240, 160, 25, 80));
+// 可以看到，25条边的正多边形，r=60的时候，和圆形的差别不是很大了
+
+
+		</script>
+    </body>
+</html>

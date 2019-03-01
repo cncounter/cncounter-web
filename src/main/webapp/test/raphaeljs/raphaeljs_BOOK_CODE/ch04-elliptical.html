@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ch04 - polygon</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script>
+var paper = Raphael(0, 0, 500, 400);
+var starting_point = paper.circle(150, 150, 4).attr({ fill: "green", stroke: 0 });
+var ending_point = paper.circle(250, 220, 4).attr({ fill: "red", stroke: 0 });
+
+var path1 = paper.path("M 150,150 L 250,150 L 250,220").attr(
+"stroke-dasharray", ".");
+var path2 = paper.path("M 150,150 v 70 h 100").attr("stroke-dasharray", "-");
+//
+var curve1 = paper.path("M150,150 A100,70 45 0,0 250,220")
+                .attr({"stroke-width": 2, stroke: "blue"});
+var curve2 = paper.path("M150,150 A100,70 45 1,0 250,220")
+                .attr({"stroke-width": 2, stroke: "cyan"});
+var curve3 = paper.path("M150,150 A100,70 45 0,1 250,220")
+                .attr({"stroke-width": 2, stroke: "pink"});
+var curve4 = paper.path("M150,150 A100,70 45 1,1 250,220")
+                .attr({"stroke-width": 2, stroke: "orange"});
+		</script>
+    </body>
+</html>
