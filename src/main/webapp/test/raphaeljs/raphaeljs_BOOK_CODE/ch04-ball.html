@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ch04 - ball</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script>
+// 一像素(pixel) 表示一英尺(feet)
+var paper = Raphael(0, 0, 500, 500),
+    SCALE = 1,
+    HOME_PLATE = { x: 250, y: 350 },
+    FOUL_POLE = 250;
+
+// 左边界-部分path
+var foul_line_left = "M" + HOME_PLATE.x + "," + HOME_PLATE.y + "l"
+    + -1 * FOUL_POLE * Math.cos(Math.PI / 4) + ","
+    + -1 * FOUL_POLE * Math.sin(Math.PI / 4);
+
+// 上弧线-部分path
+var outfield_fence = "a" + FOUL_POLE + "," + FOUL_POLE + " 0 0,1 "
+        + 2 * HOME_PLATE.x * Math.sin(Math.PI / 4) + "," + 0;
+// 修改
+var outfield_fence = "a" + FOUL_POLE + "," + 1.5 * FOUL_POLE + " 0 0,1 "
+	+ 2 * HOME_PLATE.x * Math.sin(Math.PI / 4) + "," + 0;
+
+// 右边界-部分Path
+var foul_line_right = "L" + HOME_PLATE.x + "," + HOME_PLATE.y;
+
+var field = paper.path(foul_line_left + outfield_fence + foul_line_right)
+    .attr({ stroke: "none", fill: "green" });
+
+// set集合
+var infield = paper.set();
+// 矩形
+infield.push(paper.rect(HOME_PLATE.x, HOME_PLATE.y, 90, 90)
+	.attr({stroke: "none", fill:             "#993300"}));
+// 垒间线(base); 放在旋转之前
+for (var c = 0; c < 4; c += 1) {
+	infield.push(paper.rect(HOME_PLATE.x + 85 * (c % 2), HOME_PLATE.y + 85 * (c >= 2), 5, 5)
+		.attr({stroke: "none", "fill": "white"}));
+}
+// 旋转 -135度
+infield.attr("transform", "R-135 " + HOME_PLATE.x + " " + HOME_PLATE.y);
+
+		</script>
+    </body>
+</html>
