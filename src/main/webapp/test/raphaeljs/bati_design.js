@@ -1,4 +1,5 @@
-
+//
+var colorArray = ["red", "green", "blue", "pink"];
 
 // 边界
 var boundaryLineArray=[
@@ -37,6 +38,48 @@ var boundaryLineArray=[
 {x:187, y:132},
 {x:187, y:22},
 ]
+,
+[
+{x:155, y:237},
+{x:155, y:252},
+{x:141, y:252},
+{x:141, y:237},
+{x:142, y:230},
+{x:148, y:229},
+{x:152, y:232},
+{x:155, y:237},
+],
+[
+{x: 258, y:272},
+{x: 258, y:201},
+{x: 276, y:179},
+{x: 293, y:188},
+{x: 329, y:244},
+{x: 329, y:272},
+],
+[
+{x:411, y:209},
+{x:406, y:211},
+{x:403, y:215},
+{x:404, y:231},
+{x:419, y:231},
+{x:419, y:215},
+{x:417, y:211},
+{x:411, y:209},
+],
+[
+{x:185, y:135},
+{x:213, y:75},
+{x:213, y:56},
+{x:227, y:48},
+{x:231, y:46},
+{x:247, y:48},
+{x:271, y:61},
+{x:325, y:110},
+{x:355, y:122},
+{x:396, y:124},
+{x:446, y:111},
+],
 
 ];
 
@@ -65,6 +108,100 @@ var temperatureLineArray=[
       ]
     },
     {
+      text : '15',
+      addr : [
+          {x: 114, y:241},
+          {x: 118, y:257},
+          {x: 120, y:271},
+          {x: 122, y:277},
+          {x: 126, y:293},
+          {x: 130, y:306},
+          {x: 129, y:317},
+          {x: 121, y:328},
+          {x: 111, y:336},
+      ]
+    },
+    {
+      text : '16',
+      addr : [
+          {x: 114, y:186},
+          {x: 118, y:202},
+          {x: 120, y:226},
+          {x: 122, y:253},
+          {x: 126, y:270},
+          {x: 130, y:283},
+          {x: 136, y:300},
+          {x: 138, y:309},
+          {x: 135, y:327},
+          {x: 128, y:343},
+          {x: 125, y:346},
+      ]
+    },
+    {
+      text : '17',
+      addr : [
+          {x: 174, y:159},
+          {x: 175, y:168},
+          {x: 170, y:175},
+          {x: 152, y:187},
+          {x: 140, y:197},
+          {x: 133, y:212},
+          {x: 130, y:219},
+          {x: 128, y:233},
+          {x: 128, y:252},
+          {x: 132, y:268},
+          {x: 137, y:277},
+          {x: 146, y:287},
+          {x: 157, y:307},
+      ]
+    },
+    {
+      text : '18',
+      addr : [
+          {x: 194, y:120},
+          {x: 194, y:147},
+          {x: 195, y:160},
+          {x: 196, y:168},
+          {x: 194, y:175},
+          {x: 192, y:187},
+          {x: 188, y:197},
+          {x: 156, y:212},
+          {x: 139, y:219},
+          {x: 133, y:233},
+          {x: 133, y:252},
+          {x: 141, y:268},
+          {x: 149, y:277},
+          {x: 163, y:287},
+      ]
+    },
+    {
+      text : '19',
+      addr : [
+          {x: 208, y:87},
+          {x: 213, y:104},
+          {x: 212, y:120},
+          {x: 215, y:137},
+          {x: 216, y:147},
+          {x: 220, y:160},
+          {x: 223, y:168},
+          {x: 224, y:175},
+          {x: 225, y:187},
+          {x: 222, y:197},
+          {x: 211, y:212},
+          {x: 204, y:219},
+          {x: 177, y:227},
+          {x: 149, y:227},
+          {x: 140, y:228},
+          {x: 136, y:238},
+          {x: 137, y:256},
+          {x: 144, y:261},
+          {x: 163, y:260},
+          {x: 179, y:259},
+          {x: 194, y:267},
+          {x: 202, y:274},
+      ]
+    },
+    {
       text : '20',
       addr : [
           {x: 220, y:54},
@@ -78,14 +215,36 @@ var temperatureLineArray=[
       ]
     },
     {
-      text : '',
+      text : '21',
       addr : [
-          {x: 258, y:272},
-          {x: 258, y:201},
-          {x: 276, y:179},
-          {x: 293, y:188},
-          {x: 329, y:244},
-          {x: 329, y:272},
+          {x: 246, y:48},
+          {x: 243, y:56},
+          {x: 236, y:71},
+          {x: 237, y:88},
+          {x: 243, y:119},
+          {x: 250, y:136},
+          {x: 266, y:154},
+          {x: 328, y:198},
+          {x: 370, y:204},
+          {x: 411, y:205},
+          {x: 424, y:211},
+          {x: 430, y:228},
+          {x: 429, y:251},
+          {x: 429, y:266},
+      ]
+    },
+    {
+      text : '22',
+      addr : [
+          {x: 248, y:49},
+          {x: 246, y:61},
+          {x: 249, y:95},
+          {x: 316, y:164},
+          {x: 375, y:176},
+          {x: 389, y:180},
+          {x: 420, y:200},
+          {x: 447, y:230},
+          {x: 456, y:238},
       ]
     },
 ];
@@ -193,21 +352,38 @@ function toDrawTemperatureLine(paper, tempLineArray){
         var t = tempLineArray[i];
         if(!t){continue;}
         //
-        var curvePathObj =tempToCurvePath(t, paper);
-        cArray.push(curvePathObj);
-    }
-    //
-    // 绘制Path
-    for(var i=0; i<cArray.length;i++){
-        var curvePathObj = cArray[i];
+        var curvePathObj =tempToCurvePath(t);//, paper);
+        //cArray.push(curvePathObj);
+		// 绘制Path
+		//
+		var color = colorArray[(i%colorArray.length)];
         //
         var p = paper.path(curvePathObj.path);
         p.attr({
             fill : curvePathObj.fill || "#fff",
-            stroke : curvePathObj.stroke || "#000",
+            stroke : curvePathObj.stroke || color|| "#000",
             "stroke-width" : curvePathObj.stroke || "0.6"
         });
+		//
+        var addr = t.addr || [];
+        var text = t.text;
+		//
+		if(text){
+			var centerIndex = Math.ceil(addr.length /2)
+			var centerPoint = addr[centerIndex];
+			// 绘制白心圆点
+			var dot = paper.circle(centerPoint.x, centerPoint.y, 6);
+			dot.attr("fill", "white");
+			dot.attr("stroke", "white");
+			//dot.attr("stroke", "blue");
+			//dot.attr("stroke-width", 3);
+			// 温度
+			var txt = paper.text(centerPoint.x, centerPoint.y, text);
+			txt.attr({"stroke": color, "stroke-width": 0.3, "font-size": 12});
+		}
+		
     }
+	// 
 
     // 温度线转换为曲线Path
     function tempToCurvePath(tempLine, paper){
