@@ -77,6 +77,17 @@ var temperatureLineArray=[
           {x: 258, y:272},
       ]
     },
+    {
+      text : '',
+      addr : [
+          {x: 258, y:272},
+          {x: 258, y:201},
+          {x: 276, y:179},
+          {x: 293, y:188},
+          {x: 329, y:244},
+          {x: 329, y:272},
+      ]
+    },
 ];
 
 
@@ -182,7 +193,7 @@ function toDrawTemperatureLine(paper, tempLineArray){
         var t = tempLineArray[i];
         if(!t){continue;}
         //
-        var curvePathObj =tempToCurvePath(t);
+        var curvePathObj =tempToCurvePath(t, paper);
         cArray.push(curvePathObj);
     }
     //
@@ -199,7 +210,7 @@ function toDrawTemperatureLine(paper, tempLineArray){
     }
 
     // 温度线转换为曲线Path
-    function tempToCurvePath(tempLine){
+    function tempToCurvePath(tempLine, paper){
             if(!tempLine){return null;}
             //var pArray = [];
             var prevNode = null;
@@ -213,16 +224,141 @@ function toDrawTemperatureLine(paper, tempLineArray){
                     prevNode = node;
                     continue;
                 }
-                //
-                //var pathString = "";
-                pathString += "M"+prevNode.x + " " + prevNode.y +" ";
-                pathString += "L"+node.x + " " + node.y ;//+"z";
+				var controllPairObj = calcControllPoint(prevNode, node, itemAt(addr, j-2), itemAt(addr, j+1));
+				//
+				pathString += "M"+prevNode.x + "," + prevNode.y +" ";
+				if(!controllPairObj){
+					// 直线
+					pathString += "L"+node.x + " " + node.y ;
+				} else {
+					// 贝塞尔
+					pathString += "C";
+					// 增加控制点
+					pathString += " "+controllPairObj.x1 + "," + controllPairObj.y1;
+					pathString += " "+controllPairObj.x2 + "," + controllPairObj.y2;
+					// 避免中途拐弯。
+					/*
+					pathString += " "+Math.round((controllPairObj.x1+controllPairObj.x2)/2) 
+						+ "," + Math.round((controllPairObj.y1+controllPairObj.y2)/2);
+					pathString += " "+Math.round((controllPairObj.x1+controllPairObj.x2)/2) 
+						+ "," + Math.round((controllPairObj.y1+controllPairObj.y2)/2);*/
+
+					// 终点
+					pathString += " "+node.x + "," + node.y ;
+				}
+				if(paper){
+					var p = paper.path(pathString);
+					p.attr({
+						fill :  "#fff",
+						stroke :  "#000",
+						"stroke-width" :  "0.6"
+					});
+					pathString = "";
+				}
                 //
                 //pArray.push({path:pathString});
                 //
                 prevNode = node;
             }
-            pathString += "z";
+            // pathString += "z";
             return {path:pathString};
     };
+	//
+	function itemAt(arr, idx){
+		if(idx < 0 || idx >= arr.length){return null;}
+		return arr[idx];
+	};
+	//
+	function to1min(dx, dx2){
+		var symbol = (dx2 < 0) ? -1 : 1;
+		var dxa = Math.abs(dx);
+		var dx2a = Math.abs(dx2);
+		return symbol * Math.min(dxa, dx2a);
+		
+	};
+
+	// 计算控制点
+	// beforeNode影响x1y1; afterNode 影响x2y2
+	// 下一步尝试返回 {x1, y1, x2, y2, mx, my}
+	function calcControllPoint(startNode, endNode, beforeNode, afterNode){
+		if(!startNode || !endNode){ return null; }
+		if(!beforeNode && !afterNode){ return null; }
+		// 均力点
+		var avgForcePoint = {
+			x1 : null,
+			y1 : null,
+			x1 : null,
+			y1 : null
+		};
+		// 系数
+		var scale = 0.7;
+		// 两个坐标点
+		var startX = startNode.x;
+		var startY = startNode.y;
+		var endX = endNode.x;
+		var endY = endNode.y;
+		// 中间点
+		var middleNode = {x: Math.round((startX+endX)/2), y: Math.round((startY+endY)/2) };
+		// 类似直线; 特殊处理;
+		if(startX == endX || startY == endY){
+			avgForcePoint.x1 = middleNode.x;
+			avgForcePoint.x2 = middleNode.x;
+			avgForcePoint.y1 = middleNode.y;
+			avgForcePoint.y2 = middleNode.y;
+			return avgForcePoint;
+		}
+		// 算偏移量;
+		// 最大偏移量
+		var dx = endX - startX;
+		var dy = endY - startY;
+		//
+		//
+		if(beforeNode){
+			//
+			var pdx = beforeNode.x - startX;
+			var pdy = beforeNode.y - startY;
+			pdx=to1min(dx, pdx);
+			pdy=to1min(dy, pdy);
+			//
+			avgForcePoint.x1 = middleNode.x - pdx * scale;
+			avgForcePoint.y1 = middleNode.y - pdy * scale;
+		}
+		if(afterNode){
+			//
+			var ndx = afterNode.x - endX;
+			var ndy = afterNode.y - endY;
+			ndx=to1min(dx, ndx);
+			ndy=to1min(dy, ndy);
+			//
+			avgForcePoint.x2 = middleNode.x - ndx * scale;
+			avgForcePoint.y2 = middleNode.y - ndy * scale;
+		}
+		//
+		if(!beforeNode){
+			avgForcePoint.x1 = avgForcePoint.x2;
+			avgForcePoint.y1 = avgForcePoint.y2;
+		}
+		//
+		if(!afterNode){
+			avgForcePoint.x2 = avgForcePoint.x1;
+			avgForcePoint.y2 = avgForcePoint.y1;
+		}
+		// 算出均力点; 避免中途拐弯。
+		var mx = Math.round((avgForcePoint.x1+avgForcePoint.x2)/2);
+		var my = Math.round((avgForcePoint.y1+avgForcePoint.y2)/2);
+		// 然后依次计算
+		var controllPairObj = {
+			mx : mx,
+			my : my,
+			x1 : mx,//Math.round((mx + startX)/2),
+			y1 : my,//Math.round((my + startY)/2),
+			x2 : mx,//Math.round((mx + endX)/2),
+			y2 : my,//Math.round((my + endX)/2)
+		};
+		
+		//
+		console.log("arguments:", arguments, "; controllPairObj:" , controllPairObj);
+		//
+		return controllPairObj;
+	};
 };
