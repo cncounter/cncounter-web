@@ -1,5 +1,6 @@
 package com.cncounter.test.java;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -11,8 +12,8 @@ public class InterThread {
 //        demo1();
 //        demo2();
 //        demo3();
-        demo4();
-
+//        demo4();
+        runDAfterABC();
     }
 
     private static void printNumber(String threadName) {
@@ -182,5 +183,38 @@ public class InterThread {
         //
         B.start();
     }
-
+    private static void runDAfterABC() {
+        int worker = 3;
+        final CountDownLatch countDownLatch = new CountDownLatch(worker);
+        Thread D = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("D 线程即将调用 countDownLatch.await(); 等待其他线程通知。");
+                try {
+                    countDownLatch.await();
+                    System.out.println("其他线程全部执行完成, D 开始干活...");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        D.start();
+        //
+        for (char threadName='A'; threadName <= 'C'; threadName++) {
+            final String tN = String.valueOf(threadName);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println(tN + " 线程正在执行...");
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(tN + " 线程执行完毕, 调用 countDownLatch.countDown()");
+                    countDownLatch.countDown();
+                }
+            }).start();
+        }
+    }
 }
