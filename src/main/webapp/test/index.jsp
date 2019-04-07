@@ -24,7 +24,7 @@
                 <a target="_blank" href="./checkSidCardNum/checkSidCardNum.html">计算身份证校验位</a>
             </h2>
 			<h2>
-				<a target="_blank" href="./apitest/config/websiteconfig.jsp">开启调试模式</a>
+				<a target="_blank" href="./randomnum.jsp">随机数使用</a>
 			</h2>
 			<h2>
 				<a target="_blank" href="../druid/weburi.html">Druid监控页面</a>
