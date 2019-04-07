@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ch02-shapes</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script>
+// Raphael(container, width. height, callback) or ...
+var paper = new Raphael(0, 0, 500, 500);
+var circle = paper.circle(120, 110, 25).attr("fill", "yellow");
+
+circle.drag(dragmove, dragstart, dragend);
+
+function dragstart(x, y, e) {
+    // save the value of the transformation at the start of the drag
+    // if this is the initial drag, it will be a blank string
+    this.current_transform = this.transform();
+    this.data("current_fill", this.attr("fill"));
+    // just for kicks
+    this.attr("fill", "orange");
+}
+
+function dragmove(dx, dy, x, y, e) {
+    // adjust the pre-existing transformation (if any) by the drag difference
+    this.transform(this.current_transform+'T'+dx+','+dy);
+}
+
+function dragend(e) {
+    // update the current transformation with the final value
+    this.current_transform = this.transform();
+    // that's enough kicks
+    this.attr("fill", this.data("current_fill"));
+}
+
+
+		
+		
+		</script>
+    </body>
+</html>

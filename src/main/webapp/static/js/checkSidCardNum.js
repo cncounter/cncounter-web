@@ -49,8 +49,19 @@ function checkSidCardNum(code) {
         tip = "地址编码错误";
         pass = false;
     } else {
+        // 判断月份-日期
+        var month = code.substr(10,2);
+        var date = code.substr(12,2);
+        if(month > 12){
+            tip = "月份错误";
+            pass = false;
+        } else if(date > 31){
+            tip = "日期错误";
+            pass = false;
+        }
+        //
         //18位身份证需要验证最后一位校验位
-        if(code.length == 18){
+        else if(code.length == 18){
             code = code.split('');
             //∑(ai×Wi)(mod 11)
             //加权因子
