@@ -7,7 +7,7 @@
 	<title>随机数使用 - 性能计数器-cncounter</title>
 	<jsp:include page="/common/cssjs.jsp"></jsp:include>
 
-	<script type="text/javascript" src="notMultiClick.js"></script>
+	<script type="text/javascript" src="notMultiClick/notMultiClick.js"></script>
 </head>
 <body>
 	<jsp:include page="/common/header.jsp"></jsp:include>
