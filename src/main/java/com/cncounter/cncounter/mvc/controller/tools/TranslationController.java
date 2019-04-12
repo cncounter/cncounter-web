@@ -1,9 +1,9 @@
 package com.cncounter.cncounter.mvc.controller.tools;
 
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
+import com.cncounter.common.web.ControllerBase;
 import com.cncounter.cncounter.mvc.msg.JSONMessage;
 import com.cncounter.cncounter.service.api.other.YoudaoFanyiService;
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,6 +1,6 @@
 package com.cncounter.cncounter.mvc.controller.open;
 
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
+import com.cncounter.common.web.ControllerBase;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;

@@ -1,7 +1,7 @@
 <%@ page import="java.net.URLDecoder" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="com.cncounter.util.string.StringNumberUtil" %>
+<%@ page import="com.cncounter.common.util.StringNumberUtil" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 

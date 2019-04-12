@@ -1,5 +1,5 @@
 <%@ page import="com.cncounter.cncounter.model.view.UserVO" %>
-<%@ page import="com.cncounter.cncounter.mvc.controller.base.ControllerBase" %>
+<%@ page import="com.cncounter.common.web.ControllerBase" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="basePath.jsp"%>
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@page import="com.cncounter.cncounter.model.other.Favorite"%>
 <%@page import="java.util.*"%>
-<%@page import="com.cncounter.util.string.StringNumberUtil"%>
+<%@page import="com.cncounter.common.util.StringNumberUtil"%>
 
 <%@include file="../basePath.jsp"%>
 <%

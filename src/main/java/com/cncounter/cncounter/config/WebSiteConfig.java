@@ -2,7 +2,7 @@ package com.cncounter.cncounter.config;
 
 import java.util.Map;
 
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.util.StringNumberUtil;
 
 public class WebSiteConfig {
 

@@ -1,7 +1,7 @@
 package com.cncounter.cncounter.mvc.controller.tools;
 
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.web.ControllerBase;
+import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

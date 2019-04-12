@@ -1,11 +1,10 @@
 package com.cncounter.cncounter.mvc.controller.tools;
 
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
+import com.cncounter.common.web.ControllerBase;
 import com.cncounter.cncounter.mvc.msg.JSONMessage;
 import com.cncounter.util.net.HttpClientUtils;
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.util.StringNumberUtil;
 import com.cncounter.util.zxing.ZXingUtil;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,7 +108,7 @@ public class QRCodeController extends ControllerBase {
 	public void getQrCode(@PathVariable("uuid")String uuid, 
 			HttpServletRequest request, HttpServletResponse response) {
 		String uuidKey = getUUIDKey(uuid);
-		String content = (String)getFromCache(request, uuidKey);
+		String content = (String)getFromCache(uuidKey);
 		//
 		int w = getParameterInt(request, "w", 300);
 		int h = getParameterInt(request, "h", 300);
@@ -136,7 +135,7 @@ public class QRCodeController extends ControllerBase {
 	public ModelAndView getQrCodePage(@PathVariable("uuid")String uuid, 
 			HttpServletRequest request, HttpServletResponse response) {
 		String uuidKey = getUUIDKey(uuid);
-		String content = (String)getFromCache(request, uuidKey);
+		String content = (String)getFromCache(uuidKey);
 		//
 		int w = getParameterInt(request, "w", 300);
 		int h = getParameterInt(request, "h", 300);

@@ -2,10 +2,10 @@ package com.cncounter.cncounter.mvc.controller.tools;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
+import com.cncounter.common.web.ControllerBase;
 import com.cncounter.cncounter.mvc.msg.JSONMessage;
 import com.cncounter.util.net.IPUtils;
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;

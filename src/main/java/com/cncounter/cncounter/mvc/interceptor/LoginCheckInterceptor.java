@@ -1,7 +1,7 @@
 package com.cncounter.cncounter.mvc.interceptor;
 
 import com.cncounter.cncounter.model.view.UserVO;
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
+import com.cncounter.common.web.ControllerBase;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 

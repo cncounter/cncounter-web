@@ -1,10 +1,10 @@
 package com.cncounter.cncounter.mvc.controller.biz;
 
 import com.cncounter.cncounter.model.other.Favorite;
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
+import com.cncounter.common.web.ControllerBase;
 import com.cncounter.cncounter.mvc.msg.JSONMessage;
 import com.cncounter.cncounter.service.api.other.FavoriteService;
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

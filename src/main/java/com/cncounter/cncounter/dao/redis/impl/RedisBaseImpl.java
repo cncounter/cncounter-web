@@ -1,7 +1,7 @@
 package com.cncounter.cncounter.dao.redis.impl;
 
 import com.cncounter.cncounter.dao.redis.api.RedisBaseDAO;
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisTemplate;

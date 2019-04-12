@@ -8,7 +8,7 @@ package com.cncounter.cncounter.service.impl.other;
 import com.cncounter.cncounter.dao.api.other.UserMapper;
 import com.cncounter.cncounter.model.other.User;
 import com.cncounter.cncounter.service.api.other.UserService;
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.cncounter.util.common;
+package com.cncounter.common.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 public class MD5Util {
     /**
      * 对文本执行 md5 摘要加密, 此算法与 mysql,JavaScript生成的md5摘要进行过一致性对比.
+     *
      * @param plainText
      * @return 返回值中的字母为小写
      */
@@ -42,6 +43,7 @@ public class MD5Util {
         }
         return MD5Str;
     }
+
     // 一个简版测试
     public static void main(String[] args) {
         String m1 = md5("1");
@@ -50,7 +52,7 @@ public class MD5Util {
          * m1=c4ca4238a0b923820dcc509a6f75849b
          * m2=28c8edde3d61a0411511d3b1866f0636
          */
-        System.out.println("m1="+m1);
-        System.out.println("m2="+m2);
+        System.out.println("m1=" + m1);
+        System.out.println("m2=" + m2);
     }
 }

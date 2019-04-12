@@ -1,8 +1,8 @@
 package com.cncounter.cncounter.mvc.controller.tools;
 
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
-import com.cncounter.util.common.Config;
-import com.cncounter.util.string.StringNumberUtil;
+import com.cncounter.common.web.ControllerBase;
+import com.cncounter.common.util.Config;
+import com.cncounter.common.util.StringNumberUtil;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

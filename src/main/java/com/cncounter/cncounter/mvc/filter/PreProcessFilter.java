@@ -1,7 +1,7 @@
 package com.cncounter.cncounter.mvc.filter;
 
 import com.cncounter.cncounter.config.WebSiteConfig;
-import com.cncounter.cncounter.mvc.controller.base.ControllerBase;
+import com.cncounter.common.web.ControllerBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

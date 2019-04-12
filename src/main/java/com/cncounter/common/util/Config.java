@@ -1,4 +1,4 @@
-package com.cncounter.util.common;
+package com.cncounter.common.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
