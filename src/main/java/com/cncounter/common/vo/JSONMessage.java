@@ -14,8 +14,6 @@ public class JSONMessage<T> {
      * 失败状态, 代表有错误发生, 值为0
      */
     public static final int STATUS_FAILURE = 0;
-
-
     /**
      * 是否成功,默认0为不成功,1为成功
      */
@@ -41,14 +39,14 @@ public class JSONMessage<T> {
     /**
      * 新创建一个空消息对象
      */
-    public static JSONMessage success() {
-        JSONMessage jsonMessage = new JSONMessage();
+    public static <T> JSONMessage<T> success() {
+        JSONMessage<T> jsonMessage = new JSONMessage<T>();
         jsonMessage.asSuccess();
         return jsonMessage;
     }
 
-    public static JSONMessage failure() {
-        JSONMessage jsonMessage = new JSONMessage();
+    public static <T> JSONMessage<T> failure() {
+        JSONMessage<T> jsonMessage = new JSONMessage<T>();
         jsonMessage.asFailure();
         return jsonMessage;
     }
