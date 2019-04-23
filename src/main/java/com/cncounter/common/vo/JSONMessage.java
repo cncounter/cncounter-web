@@ -19,7 +19,7 @@ public class JSONMessage<T> {
      */
     private int status = STATUS_FAILURE;
     /**
-     * 数据、类型为List,JS的Array
+     * 返回数据、类型可以是 Model, List<Model>, 以及其他类型
      */
     private T data = null;
     /**
