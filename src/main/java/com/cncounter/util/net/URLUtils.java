@@ -45,8 +45,8 @@ public class URLUtils {
                     e.printStackTrace();
                 }
             }
-            return content;
         }
+        return content;
     }
 
     /**
