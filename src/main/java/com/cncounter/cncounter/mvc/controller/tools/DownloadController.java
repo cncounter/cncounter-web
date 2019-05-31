@@ -1,7 +1,7 @@
 package com.cncounter.cncounter.mvc.controller.tools;
 
 import com.cncounter.common.web.ControllerBase;
-import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.common.vo.JSONMessage;
 import com.cncounter.common.util.Config;
 import com.cncounter.util.net.HttpClientUtils;
 import com.cncounter.common.util.StringNumberUtil;
@@ -37,7 +37,7 @@ public class DownloadController extends ControllerBase {
         try {
             return _genFileUrl(request, response);
         } catch (Throwable t) {
-            return JSONMessage.failureMessage().setInfo("处理失败");
+            return JSONMessage.failure().setMessage("处理失败");
         }
     }
 
@@ -56,7 +56,7 @@ public class DownloadController extends ControllerBase {
                 URL url = new URL(origfileurl);
                 String path = url.getPath();
                 if (null == path || path.trim().isEmpty()) {
-                    return JSONMessage.failureMessage().setInfo("只支持 http 协议");
+                    return JSONMessage.failure().setMessage("只支持 http 协议");
                 }
                 targetfilename = path.substring(path.lastIndexOf("/")+1);
             }
@@ -67,24 +67,24 @@ public class DownloadController extends ControllerBase {
         //
         if (targetfilename.endsWith(".jsp")) {
             // 暂时不管
-            //return JSONMessage.failureMessage().setInfo("不支持 jsp 文件下载");
+            //return JSONMessage.failure().setMessage("不支持 jsp 文件下载");
         }
         File targetDirectory = new File(targetDirectoryPath);
         if (!targetDirectory.exists()) {
-            return JSONMessage.failureMessage().setInfo("不存在");
+            return JSONMessage.failure().setMessage("不存在");
         }
         //
         final File targetFile = new File(targetDirectory, targetfilename);
         //
         if (targetFile.exists()) {
             // 返回
-            return JSONMessage.successMessage().setInfo("文件已存在")
+            return JSONMessage.success().setMessage("文件已存在")
                     .addMeta("targetfilename", targetfilename)
                     .addMeta("downloadurl", downloadUrlPrefix + targetfilename)
                     ;
         }
         //
-        return JSONMessage.failureMessage().addMeta("targetFile", targetFile.getAbsolutePath()).setInfo("文件不存在");
+        return JSONMessage.failure().addMeta("targetFile", targetFile.getAbsolutePath()).setMessage("文件不存在");
     }
 
     public Object _genFileUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -94,9 +94,9 @@ public class DownloadController extends ControllerBase {
         String origfileurl = paramMap.get("origfileurl");
         logger.debug("origfileurl: " + origfileurl);
         if (StringNumberUtil.isEmpty(origfileurl)) {
-            return JSONMessage.failureMessage().setInfo("origfileurl为空");
+            return JSONMessage.failure().setMessage("origfileurl为空");
         } else if (false == origfileurl.startsWith("http")) {
-            return JSONMessage.failureMessage().setInfo("只支持 http 协议");
+            return JSONMessage.failure().setMessage("只支持 http 协议");
         }
         //
         URL url = new URL(origfileurl);
@@ -105,7 +105,7 @@ public class DownloadController extends ControllerBase {
         if (StringNumberUtil.isEmpty(targetfilename)) {
             String path = url.getPath();
             if (null == path) {
-                return JSONMessage.failureMessage().setInfo("只支持 http 协议");
+                return JSONMessage.failure().setMessage("只支持 http 协议");
             }
             targetfilename = path.substring(path.lastIndexOf("/"));
         }
@@ -115,11 +115,11 @@ public class DownloadController extends ControllerBase {
         //
         if (targetfilename.endsWith(".jsp")) {
             // 暂时不管
-            //return JSONMessage.failureMessage().setInfo("不支持 jsp 文件下载");
+            //return JSONMessage.failure().setMessage("不支持 jsp 文件下载");
         }
         if (targetfilename.trim().isEmpty()) {
             // 暂时不管
-            return JSONMessage.failureMessage().setInfo("不支持目录下载");
+            return JSONMessage.failure().setMessage("不支持目录下载");
         }
         File targetDirectory = new File(targetDirectoryPath);
         if (!targetDirectory.exists()) {
@@ -130,7 +130,7 @@ public class DownloadController extends ControllerBase {
         //
         if (targetFile.exists()) {
             // 直接返回
-            return JSONMessage.successMessage().setInfo("文件已存在")
+            return JSONMessage.success().setMessage("文件已存在")
                     .addMeta("targetfilename", targetfilename)
                     .addMeta("downloadurl", downloadUrlPrefix + targetfilename)
                     ;
@@ -138,7 +138,7 @@ public class DownloadController extends ControllerBase {
         //
         final InputStream inputStream = HttpClientUtils.getUrlAsStream(url);
         if (null == inputStream) {
-            return JSONMessage.failureMessage().setInfo("操作失败");
+            return JSONMessage.failure().setMessage("操作失败");
         }
 
         // 下载文件操作。 应该丢给线程池
@@ -172,7 +172,7 @@ public class DownloadController extends ControllerBase {
             }
         });
         //
-        return JSONMessage.successMessage().setInfo("文件正在下载")
+        return JSONMessage.success().setMessage("文件正在下载")
                 .addMeta("downloadurl", downloadUrlPrefix + targetfilename);
     }
 

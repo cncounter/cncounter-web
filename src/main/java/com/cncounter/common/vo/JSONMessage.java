@@ -115,7 +115,8 @@ public class JSONMessage<T> {
         return this.message;
     }
 
-    public void setMessage(String message) {
+    public JSONMessage<T> setMessage(String message) {
         this.message = message;
+        return this;
     }
 }

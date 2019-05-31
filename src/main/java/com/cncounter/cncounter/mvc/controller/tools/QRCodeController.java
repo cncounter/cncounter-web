@@ -1,7 +1,7 @@
 package com.cncounter.cncounter.mvc.controller.tools;
 
 import com.cncounter.common.web.ControllerBase;
-import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.common.vo.JSONMessage;
 import com.cncounter.util.net.HttpClientUtils;
 import com.cncounter.common.util.StringNumberUtil;
 import com.cncounter.util.zxing.ZXingUtil;
@@ -63,13 +63,13 @@ public class QRCodeController extends ControllerBase {
 		String uuidKey = getUUIDKey(uuid);
 		saveToCache(request, uuidKey, content);
 		//
-		JSONMessage message = JSONMessage.newMessage();
+		JSONMessage message = JSONMessage.failure();
 		//
 		//message.setTotal(total); 
 		message.addMeta("uuid", uuid);
 		message.addMeta("src", src);
 		message.addMeta("href", href);
-		message.setSuccess();
+		message.asSuccess();
 		
 		//
 		return message;
@@ -159,18 +159,18 @@ public class QRCodeController extends ControllerBase {
 		// 需要转换的内容
 		InputStream inputStream = _uploadFile(request);
 		if (null == inputStream){
-			return JSONMessage.failureMessage().setInfo("文件上传失败!");
+			return JSONMessage.failure().setMessage("文件上传失败!");
 		}
 		//
 		String qrcodeInfo = parseQrImage2String(inputStream);
 		//
-		JSONMessage message = JSONMessage.newMessage();
+		JSONMessage message = JSONMessage.failure();
 		//
 		if(StringNumberUtil.notEmpty(qrcodeInfo)){
-			message.setSuccess().setInfo("解析成功!");
+			message.asSuccess().setMessage("解析成功!");
 			message.addMeta("qrcodeInfo", qrcodeInfo);
 		} else {
-			message.setFailure().setInfo("解析失败!");
+			message.asFailure().setMessage("解析失败!");
 		}
 		return message;
 	}
@@ -184,18 +184,18 @@ public class QRCodeController extends ControllerBase {
 		//
 		InputStream inputStream = HttpClientUtils.getUrlAsStream(image_url);
 		if (null == inputStream){
-			return JSONMessage.failureMessage().setInfo("文件URL错误!");
+			return JSONMessage.failure().setMessage("文件URL错误!");
 		}
 
 		String qrcodeInfo = parseQrImage2String(inputStream);
 		//
-		JSONMessage message = JSONMessage.newMessage();
+		JSONMessage message = JSONMessage.failure();
 		//
 		if(StringNumberUtil.notEmpty(qrcodeInfo)){
-			message.setSuccess().setInfo("解析成功!");
+			message.asSuccess().setMessage("解析成功!");
 			message.addMeta("qrcodeInfo", qrcodeInfo);
 		} else {
-			message.setFailure().setInfo("解析失败!");
+			message.asFailure().setMessage("解析失败!");
 		}
 		//
 		return message;

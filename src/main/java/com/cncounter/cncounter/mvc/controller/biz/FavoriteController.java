@@ -2,7 +2,7 @@ package com.cncounter.cncounter.mvc.controller.biz;
 
 import com.cncounter.cncounter.model.other.Favorite;
 import com.cncounter.common.web.ControllerBase;
-import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.common.vo.JSONMessage;
 import com.cncounter.cncounter.service.api.other.FavoriteService;
 import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,14 +67,14 @@ public class FavoriteController extends ControllerBase{
 		int rows = favoriteService.add(favorite);
 		
 		//
-		JSONMessage jsonMessage = JSONMessage.newMessage();
+		JSONMessage jsonMessage = JSONMessage.failure();
 		String info = "";
 		//
 		if(1 == rows){
-			jsonMessage.setSuccess();
+			jsonMessage.asSuccess();
 			info = "添加成功";
 		}
-		jsonMessage.setInfo(info);
+		jsonMessage.setMessage(info);
 		// 未实现日志
 		return jsonMessage;
 	}

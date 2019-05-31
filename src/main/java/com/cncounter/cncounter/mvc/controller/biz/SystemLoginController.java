@@ -4,7 +4,7 @@ import com.cncounter.cncounter.config.QueryConditionMap;
 import com.cncounter.cncounter.model.other.User;
 import com.cncounter.cncounter.model.view.UserVO;
 import com.cncounter.common.web.ControllerBase;
-import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.common.vo.JSONMessage;
 import com.cncounter.cncounter.service.api.other.UserService;
 import com.cncounter.common.util.CNC;
 import com.cncounter.common.util.StringNumberUtil;
@@ -32,7 +32,7 @@ public class SystemLoginController extends ControllerBase {
 	@ResponseBody
 	public Object login(HttpServletRequest request, HttpServletResponse response) {
 		//
-		JSONMessage message = JSONMessage.newMessage();
+		JSONMessage message = JSONMessage.failure();
 		// 需要转换的内容
 		String loginemail = getParameterString(request, "loginemail", "");
 		String loginpassword = getParameterString(request, "loginpassword", "");
@@ -40,14 +40,14 @@ public class SystemLoginController extends ControllerBase {
 		if(StringNumberUtil.isEmpty(loginemail) || StringNumberUtil.isEmpty(loginpassword)){
 			// 出错
 			message.setStatus(JSONMessage.STATUS_FAILURE);
-			message.setInfo("参数错误");
+			message.setMessage("参数错误");
 			return message;
 		}
 
         if(StringNumberUtil.isEmpty(loginemail) || StringNumberUtil.isEmpty(loginpassword)){
             // 出错
             message.setStatus(JSONMessage.STATUS_FAILURE);
-            message.setInfo("参数错误");
+            message.setMessage("参数错误");
             return message;
         }
         //
@@ -58,8 +58,8 @@ public class SystemLoginController extends ControllerBase {
         //
         List<User> existsCount = userService.listPage(params);
         if(null == existsCount || existsCount.isEmpty()){
-            message.setFailure();
-            message.setInfo("用户不存在");
+            message.asFailure();
+            message.setMessage("用户不存在");
             return message;
         }
         //
@@ -79,7 +79,7 @@ public class SystemLoginController extends ControllerBase {
             //
         } else {
             // 认为登录失败
-            return message.setFailure().setInfo("用户密码错误");
+            return message.asFailure().setMessage("用户密码错误");
         }
 
         //
@@ -95,8 +95,8 @@ public class SystemLoginController extends ControllerBase {
 		//message.setTotal(total);
 		message.addMeta("loginemail",loginemail);
 		message.addMeta("token",token);
-		message.setInfo("登录成功");
-		message.setSuccess();
+		message.setMessage("登录成功");
+		message.asSuccess();
 		//
 		return message;
 	}

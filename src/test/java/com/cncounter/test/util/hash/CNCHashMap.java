@@ -9,7 +9,8 @@ import java.util.*;
  */
 public class CNCHashMap<K, V> implements Map<K, V> {
 
-    // 内部节点
+    // 内部节点-链表节点
+    // 红黑树请参考: @see https://zhuanlan.zhihu.com/p/31805309
     static class Node<K, V> implements Map.Entry<K, V> {
         // hash值由外层进行计算,
         private final int hash;

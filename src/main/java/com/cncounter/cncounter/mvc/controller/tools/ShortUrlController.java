@@ -1,7 +1,7 @@
 package com.cncounter.cncounter.mvc.controller.tools;
 
 import com.cncounter.common.web.ControllerBase;
-import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.common.vo.JSONMessage;
 import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,18 +25,18 @@ public class ShortUrlController extends ControllerBase {
 		int startIndex = uri.indexOf(URI_PREFIX) + URI_PREFIX.length();
 		//String uuid = uri.substring(startIndex);
 		if(null == uuid){
-			return JSONMessage.failureMessage().setInfo("参数错误");
+			return JSONMessage.failure().setMessage("参数错误");
 		}
 		//
 		String uuidKey = getUUIDKey(uuid);
 		Object cachedContent = getFromCache(uuidKey);
 		if(null == cachedContent){
 			// 出错处理
-			return JSONMessage.failureMessage().setInfo("参数错误");
+			return JSONMessage.failure().setMessage("参数错误");
 		}
 		String origurl = cachedContent.toString();
 		if(StringNumberUtil.isEmpty(origurl) || !origurl.startsWith("http")){
-			return JSONMessage.failureMessage().setInfo("参数错误");
+			return JSONMessage.failure().setMessage("参数错误");
 		}
         //
         String targetUrl = parseRandomValue(origurl, "_randomvalue_");
@@ -46,7 +46,7 @@ public class ShortUrlController extends ControllerBase {
 			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return JSONMessage.failureMessage().setInfo("参数错误");
+			return JSONMessage.failure().setMessage("参数错误");
 		}
 
 	}
@@ -72,7 +72,7 @@ public class ShortUrlController extends ControllerBase {
 		// 需要转换的内容
 		String origurl = getParameterString(request, "origurl", "");
 		if(StringNumberUtil.isEmpty(origurl) || !origurl.startsWith("http")){
-			return JSONMessage.failureMessage().setInfo("参数错误");
+			return JSONMessage.failure().setMessage("参数错误");
 		}
 		// 使用Length+Hash
 		String uuid = parseContentKey(origurl);
@@ -83,13 +83,13 @@ public class ShortUrlController extends ControllerBase {
 		String uuidKey = getUUIDKey(uuid);
 		saveToCache(request, uuidKey, origurl);
 		//
-		JSONMessage message = JSONMessage.newMessage();
+		JSONMessage message = JSONMessage.failure();
 		//
 		//message.setTotal(total); 
 		message.addMeta("uuid", uuid);
 		message.addMeta("shorturl", shorturl);
 		message.addMeta("href", href);
-		message.setSuccess().setInfo("生成成功");
+		message.asSuccess().setMessage("生成成功");
 		
 		//
 		return message;

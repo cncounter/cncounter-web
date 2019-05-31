@@ -3,7 +3,7 @@ package com.cncounter.cncounter.mvc.controller.open;
 import com.cncounter.cncounter.config.QueryConditionMap;
 import com.cncounter.cncounter.model.other.User;
 import com.cncounter.common.web.ControllerBase;
-import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.common.vo.JSONMessage;
 import com.cncounter.cncounter.service.api.other.UserService;
 import com.cncounter.common.util.CNC;
 import com.cncounter.common.util.StringNumberUtil;
@@ -27,7 +27,7 @@ public class OpenApiController extends ControllerBase {
 	@ResponseBody
 	public Object signup(HttpServletRequest request, HttpServletResponse response) {
 		//
-		JSONMessage message = JSONMessage.newMessage();
+		JSONMessage message = JSONMessage.failure();
 		// 需要转换的内容
 		String loginemail = getParameterString(request, "loginemail", "");
 		String loginpassword = getParameterString(request, "loginpassword", "");
@@ -35,7 +35,7 @@ public class OpenApiController extends ControllerBase {
 		if(StringNumberUtil.isEmpty(loginemail) || StringNumberUtil.isEmpty(loginpassword)){
 			// 出错
 			message.setStatus(JSONMessage.STATUS_FAILURE);
-			message.setInfo("参数错误");
+			message.setMessage("参数错误");
 			return message;
 		}
         //
@@ -46,8 +46,8 @@ public class OpenApiController extends ControllerBase {
         //
         int existsCount = userService.countBy(params);
         if(existsCount > 0){
-            message.setFailure();
-            message.setInfo("用户已注册");
+            message.asFailure();
+            message.setMessage("用户已注册");
             return message;
         }
 
@@ -70,12 +70,12 @@ public class OpenApiController extends ControllerBase {
             //message.setTotal(total);
             message.addMeta("loginemail", loginemail);
             if(rows > 0){
-                message.setInfo("注册成功");
-                message.setSuccess();
+                message.setMessage("注册成功");
+                message.asSuccess();
             }
         } catch (Exception e){
-            message.setInfo("注册失败");
-            message.setFailure();
+            message.setMessage("注册失败");
+            message.asFailure();
         }
 		//
 		return message;
@@ -86,7 +86,7 @@ public class OpenApiController extends ControllerBase {
     @ResponseBody
     public Object resetPassword(HttpServletRequest request, HttpServletResponse response) {
         //
-        JSONMessage message = JSONMessage.newMessage();
+        JSONMessage message = JSONMessage.failure();
         // 需要转换的内容
         String loginemail = getParameterString(request, "loginemail", "");
         String loginpassword = getParameterString(request, "loginpassword", "");
@@ -94,7 +94,7 @@ public class OpenApiController extends ControllerBase {
         if(StringNumberUtil.isEmpty(loginemail) || StringNumberUtil.isEmpty(loginpassword)){
             // 出错
             message.setStatus(JSONMessage.STATUS_FAILURE);
-            message.setInfo("参数错误");
+            message.setMessage("参数错误");
             return message;
         }
         // 注册服务
@@ -102,8 +102,8 @@ public class OpenApiController extends ControllerBase {
         //
         //message.setTotal(total);
         message.addMeta("loginemail",loginemail);
-        message.setInfo("注册成功");
-        message.setSuccess();
+        message.setMessage("注册成功");
+        message.asSuccess();
         //
         return message;
     }

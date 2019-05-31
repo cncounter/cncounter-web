@@ -3,7 +3,7 @@ package com.cncounter.cncounter.mvc.controller.tools;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.cncounter.common.web.ControllerBase;
-import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.common.vo.JSONMessage;
 import com.cncounter.util.net.IPUtils;
 import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,12 +31,12 @@ public class Ip2CityController extends ControllerBase {
 		// 取得地址
 		String address = IPUtils.parseIp2Location(ip);
 		//
-		JSONMessage message = JSONMessage.newMessage();
+		JSONMessage message = JSONMessage.failure();
         //
 		message.addMeta("ip", ip);
 		message.addMeta("address", address);
         message.addMeta("tip", "本站支持 jsonp 调用;");
-		message.setSuccess().setInfo("查询成功");
+		message.asSuccess().setMessage("查询成功");
 		//
 		return message;
 	}

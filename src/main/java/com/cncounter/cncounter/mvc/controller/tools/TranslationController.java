@@ -1,7 +1,7 @@
 package com.cncounter.cncounter.mvc.controller.tools;
 
 import com.cncounter.common.web.ControllerBase;
-import com.cncounter.cncounter.mvc.msg.JSONMessage;
+import com.cncounter.common.vo.JSONMessage;
 import com.cncounter.cncounter.service.api.other.YoudaoFanyiService;
 import com.cncounter.common.util.StringNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +30,13 @@ public class TranslationController extends ControllerBase {
         //
         String text_original = request.getParameter("text_original");
         if(StringNumberUtil.isEmpty(text_original)){
-            return JSONMessage.newMessage();
+            return JSONMessage.failure();
         }
         //
         String text_translation = youdaoFanyiService.translationToCN(text_original);
         //
-        JSONMessage jsonMessage = JSONMessage.newMessage();
-        jsonMessage.setSuccess();
+        JSONMessage jsonMessage = JSONMessage.failure();
+        jsonMessage.asSuccess();
         jsonMessage.addMeta("text_translation", text_translation);
         jsonMessage.addMeta("text_original",text_original);
         //
