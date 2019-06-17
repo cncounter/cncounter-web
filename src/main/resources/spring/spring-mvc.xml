@@ -11,40 +11,23 @@
 	<context:component-scan base-package="com.cncounter">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="fastJsonConfig" ref="fastJsonConfig"/>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<bean id="fastJsonConfig" class="com.alibaba.fastjson.support.config.FastJsonConfig">
+		<!--   自定义配置...   -->
+	</bean>
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix"><value>/WEB-INF/JSP/</value></property>
 		<property name="suffix"><value>.jsp</value></property>
 	</bean>
-	
-	<!-- Jackson转换器 -->
-	<!--<bean id="mappingJacksonHttpMessageConverter"-->
-		<!--class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />-->
-	<!-- enum枚举值的引用方法 -->
-	<bean id="DisableCircularReferenceDetect" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean" >
-		<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect"></property>
-	</bean>
-	<!-- fastjson转换器 -->
-	<bean id="fastJsonHttpMessageConverter"
-		class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" >
-		<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
-		<property name="supportedMediaTypes">
-            <list><value>text/html;charset=UTF-8</value></list>
-        </property>
-		<property name="features">
-            <array>
-				<!-- 避免默认的循环引用替换 -->
-            	<ref bean="DisableCircularReferenceDetect" />
-            </array>
-        </property>
-	</bean>
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="messageConverters">
-			<list>
-				<ref bean="fastJsonHttpMessageConverter" />
-			</list>
-		</property>
-	</bean>
+
 	<!--  文件上传处理器,申明的id必须为multipartResolver  -->
 	<bean id="multipartResolver"
 		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

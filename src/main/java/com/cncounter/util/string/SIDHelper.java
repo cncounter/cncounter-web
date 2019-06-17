@@ -46,6 +46,119 @@ public class SIDHelper {
 			"4", "3", "2" };
 
 
+
+
+
+	/**
+	 * <p>判断18位身份证的合法性</p>
+	 * 根据〖中华人民共和国国家标准GB11643-1999〗中有关公民身份号码的规定，公民身份号码是特征组合码，由十七位数字本体码和一位数字校验码组成。
+	 * 排列顺序从左至右依次为：六位数字地址码，八位数字出生日期码，三位数字顺序码和一位数字校验码。
+	 * <p>顺序码: 表示在同一地址码所标识的区域范围内，对同年、同月、同 日出生的人编定的顺序号，顺序码的奇数分配给男性，偶数分配 给女性。</p>
+	 * <p>
+	 * 1.前1、2位数字表示：所在省份的代码； <br/>
+	 * 2.第3、4位数字表示：所在城市的代码； <br/>
+	 * 3.第5、6位数字表示：所在区县的代码；<br/>
+	 * 4.第7~14位数字表示：出生年、月、日；<br/>
+	 * 5.第15、16位数字表示：所在地的派出所的代码；<br/>
+	 * 6.第17位数字表示性别：奇数表示男性，偶数表示女性；<br/>
+	 * 7.第18位数字是校检码：也有的说是个人信息码，一般是随计算机的随机产生，用来检验身份证的正确性。校检码可以是0~9的数字，有时也用x表示。
+	 * </p>
+	 * <p>第十八位数字(校验码)的计算方法为： 1.将前面的身份证号码17位数分别乘以不同的系数。<br/>
+	 * 从第一位到第十七位的系数分别为：7 9 10 5 8 4 2 1 6 3 7 9 10 5 8 4 2
+	 * </p>
+	 * <p>2.将这17位数字和系数相乘的结果相加。</p>
+	 * <p>3.用加出来和除以11，看余数是多少？</p>
+	 * 4.余数只可能有0 1 2 3 4 5 6 7 8 9 10这11个数字。
+	 * 其分别对应的最后一位身份证的号码为1 0 X 9 8 7 6 5 4 3 2。
+	 * <p>
+	 * 5.通过上面得知如果余数是2，就会在身份证的第18位数字上出现罗马数字的Ⅹ。如果余数是10，身份证的最后一位号码就是2。
+	 * </p>
+	 *
+	 * @param idcard
+	 * @return
+	 */
+	public static boolean isValid(String idcard) {
+		if(idcard==null){
+			return false;
+		}
+		// 非18位为假 ---19位为最后一位增加了一位，检验前18位
+		if (idcard.length() != 18 && idcard.length() != 19) {
+			return false;
+		}
+		//如果是19位，则截取前18位
+		if(idcard.length()==19){
+			idcard=idcard.substring(0,18);
+		}
+
+		// 获取前17位
+		String idcard17 = idcard.substring(0, 17);
+		// 获取第18位
+		String idcard18Code = idcard.substring(17, 18);
+		char c[] = null;
+		// 是否都为数字
+		if (isDigital(idcard17)) {
+			c = idcard17.toCharArray();
+		} else {
+			return false;
+		}
+
+		if (null != c) {
+			int bit[] = new int[idcard17.length()];
+
+			bit = converCharToInt(c);
+
+			int sum17 = 0;
+
+			sum17 = getPowerSum(bit);
+
+			// 将和值与11取模得到余数进行校验码判断
+			String checkCode = "";
+			checkCode = getCheckCodeBySum(sum17);
+			if (null == checkCode) {
+				return false;
+			}
+			// 将身份证的第18位与算出来的校码进行匹配，不相等就为假
+			if (!idcard18Code.equalsIgnoreCase(checkCode)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 计算校验位
+	 * @param idcard
+	 * @return
+	 */
+	public static String calculateCheckBit(String idcard) {
+		String checkCode = "";
+		if(null == idcard || idcard.trim().length() < 17 || idcard.trim().length()> 18){
+			return checkCode;
+		}
+
+		// 获取前17位
+		String idcard17 = idcard.substring(0, 17);
+		char c[] = null;
+		// 是否都为数字
+		if (isDigital(idcard17)) {
+			c = idcard17.toCharArray();
+		}
+
+		if (null == c) {
+			return checkCode;
+		}
+
+		int bit[] = new int[idcard17.length()];
+
+		bit = converCharToInt(c);
+
+		int sum17 = getPowerSum(bit);
+
+		// 将和值与11取模得到余数进行校验码判断
+		checkCode = getCheckCodeBySum(sum17);
+		//
+		return checkCode;
+	}
 	/**
 	 * 数字验证
 	 * 
@@ -142,124 +255,11 @@ public class SIDHelper {
 		}
 		return a;
 	}
-	
 
-	/**
-	 * 计算校验位
-	 * @param idcard
-	 * @return
-	 */
-	public static String calculateCheckCode(String idcard) {
-		String checkCode = "";
-		if(null == idcard || idcard.trim().length() < 17 || idcard.trim().length()> 18){
-			return checkCode;
-		}
-		
-		// 获取前17位
-		String idcard17 = idcard.substring(0, 17);
-		char c[] = null;
-		// 是否都为数字
-		if (isDigital(idcard17)) {
-			c = idcard17.toCharArray();
-		}
-
-		if (null == c) {
-			return checkCode;
-		}
-		
-		int bit[] = new int[idcard17.length()];
-
-		bit = converCharToInt(c);
-
-		int sum17 = getPowerSum(bit);
-
-		// 将和值与11取模得到余数进行校验码判断
-		checkCode = getCheckCodeBySum(sum17);
-		//
-		return checkCode;
-	}
-
-
-	/**
-	 * <p>判断18位身份证的合法性</p>
-	 * 根据〖中华人民共和国国家标准GB11643-1999〗中有关公民身份号码的规定，公民身份号码是特征组合码，由十七位数字本体码和一位数字校验码组成。
-	 * 排列顺序从左至右依次为：六位数字地址码，八位数字出生日期码，三位数字顺序码和一位数字校验码。
-	 * <p>顺序码: 表示在同一地址码所标识的区域范围内，对同年、同月、同 日出生的人编定的顺序号，顺序码的奇数分配给男性，偶数分配 给女性。</p>
-	 * <p>
-	 * 1.前1、2位数字表示：所在省份的代码； <br/>
-	 * 2.第3、4位数字表示：所在城市的代码； <br/>
-	 * 3.第5、6位数字表示：所在区县的代码；<br/>
-	 * 4.第7~14位数字表示：出生年、月、日；<br/>
-	 * 5.第15、16位数字表示：所在地的派出所的代码；<br/>
-	 * 6.第17位数字表示性别：奇数表示男性，偶数表示女性；<br/>
-	 * 7.第18位数字是校检码：也有的说是个人信息码，一般是随计算机的随机产生，用来检验身份证的正确性。校检码可以是0~9的数字，有时也用x表示。
-	 * </p>
-	 * <p>第十八位数字(校验码)的计算方法为： 1.将前面的身份证号码17位数分别乘以不同的系数。<br/>
-	 * 从第一位到第十七位的系数分别为：7 9 10 5 8 4 2 1 6 3 7 9 10 5 8 4 2
-	 * </p>
-	 * <p>2.将这17位数字和系数相乘的结果相加。</p>
-	 * <p>3.用加出来和除以11，看余数是多少？</p>
-	 * 4.余数只可能有0 1 2 3 4 5 6 7 8 9 10这11个数字。
-	 * 其分别对应的最后一位身份证的号码为1 0 X 9 8 7 6 5 4 3 2。
-	 * <p>
-	 * 5.通过上面得知如果余数是2，就会在身份证的第18位数字上出现罗马数字的Ⅹ。如果余数是10，身份证的最后一位号码就是2。
-	 * </p>
-	 * 
-	 * @param idcard
-	 * @return
-	 */
-	public static boolean isValidSID(String idcard) {
-		if(idcard==null){
-			return false;
-		}
-		// 非18位为假 ---19位为最后一位增加了一位，检验前18位
-		if (idcard.length() != 18 && idcard.length() != 19) {
-			return false;
-		}
-		//如果是19位，则截取前18位
-		if(idcard.length()==19){
-			idcard=idcard.substring(0,18);
-		}
-		
-		// 获取前17位
-		String idcard17 = idcard.substring(0, 17);
-		// 获取第18位
-		String idcard18Code = idcard.substring(17, 18);
-		char c[] = null;
-		// 是否都为数字
-		if (isDigital(idcard17)) {
-			c = idcard17.toCharArray();
-		} else {
-			return false;
-		}
-
-		if (null != c) {
-			int bit[] = new int[idcard17.length()];
-
-			bit = converCharToInt(c);
-
-			int sum17 = 0;
-
-			sum17 = getPowerSum(bit);
-
-			// 将和值与11取模得到余数进行校验码判断
-			String checkCode = "";
-			checkCode = getCheckCodeBySum(sum17);
-			if (null == checkCode) {
-				return false;
-			}
-			// 将身份证的第18位与算出来的校码进行匹配，不相等就为假
-			if (!idcard18Code.equalsIgnoreCase(checkCode)) {
-				return false;
-			}
-		}
-		return true;
-	}
 
 	public static void main(String[] args) throws Exception {
-		//String idcard18 = "53262319880509151X";
 		String idcard18 = "532623198806300045";
 		boolean flag = false;
-		flag = SIDHelper.isValidSID(idcard18);
+		flag = SIDHelper.isValid(idcard18);
 	}
 }
