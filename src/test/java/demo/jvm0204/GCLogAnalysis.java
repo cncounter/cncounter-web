@@ -15,18 +15,18 @@ public class GCLogAnalysis {
         // 当前毫秒时间戳
         long startMillis = System.currentTimeMillis();
         // 持续运行毫秒数﻿
-        long timeoutMillis = TimeUnit.SECONDS.toMillis(1);
+        long timeoutMillis = TimeUnit.SECONDS.toMillis(31);
         // 结束时间戳
         long endMillis = startMillis + timeoutMillis;
         LongAdder counter = new LongAdder();
         System.out.println("正在执行...");
         // 缓存一部分对象; 进入老年代
-        int cacheSize = 200;
+        int cacheSize = 2000;
         Object[] cachedGarbage = new Object[cacheSize];
         // 在此时间范围内,持续循环
         while (System.currentTimeMillis() < endMillis) {
             // 生成垃圾对象
-            Object garbage = generateGarbage(1024*1024);
+            Object garbage = generateGarbage(100*1024);
             counter.increment();
             int randomIndex = random.nextInt(2 * cacheSize);
             if (randomIndex < cacheSize) {
