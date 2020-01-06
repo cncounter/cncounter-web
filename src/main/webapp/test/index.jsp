@@ -27,6 +27,9 @@
 				<a target="_blank" href="./randomnum.jsp">随机数使用</a>
 			</h2>
 			<h2>
+				<a target="_blank" href="./md5.jsp">MD5值计算</a>
+			</h2>
+			<h2>
 				<a target="_blank" href="../druid/weburi.html">Druid监控页面</a>
 			</h2>
 			<h2>
