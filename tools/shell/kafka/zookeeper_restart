@@ -1,0 +1,40 @@
+
+KAFKA_HOME=/Users/renfufei/SOFT_ALL/kafka_2.12-2.3.0
+
+# try to stop
+INSTANCE_ID0=`ps -ef | grep org.apache.zookeeper.server.quorum.QuorumPeerMain | grep "$KAFKA_HOME" | grep -v grep | awk '{print $2}'`
+
+echo "check prev-instance ..."
+
+if [ -n "$INSTANCE_ID0" ] ; then
+    echo "try to execute ./bin/zookeeper-server-stop.sh";
+    $KAFKA_HOME/bin/zookeeper-server-stop.sh
+    sleep 15;
+else
+    echo "prev-instance NOT FOUND."
+fi
+
+
+# force kill
+INSTANCE_ID=`ps -ef | grep org.apache.zookeeper.server.quorum.QuorumPeerMain | grep "$KAFKA_HOME" | grep -v grep | awk '{print $2}'`
+
+if [ -n "$INSTANCE_ID" ] ; then
+    kill -9 "$INSTANCE_ID"
+    echo "prev-instance has been killed."
+else
+    echo "prev-instance not found! ignore."
+fi
+
+cd $KAFKA_HOME
+
+
+nohup $KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &
+
+echo "zookeeper-server RUN IN BACKGROUND."
+sleep 1;
+
+tail -f nohup.out
+
+
+
+

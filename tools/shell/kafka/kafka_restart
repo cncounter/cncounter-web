@@ -1,0 +1,35 @@
+
+KAFKA_HOME=/Users/renfufei/SOFT_ALL/kafka_2.12-2.3.0
+
+# try to stop
+INSTANCE_ID0=`ps -ef | grep kafka.Kafka | grep "$KAFKA_HOME" | grep -v grep | awk '{print $2}'`
+
+if [ -n "$INSTANCE_ID0" ] ; then
+    echo "try to execute ./bin/kafka-server-stop.sh";
+    $KAFKA_HOME/bin/kafka-server-stop.sh
+else
+    echo "check prev-instance ..."
+fi
+
+sleep 5;
+
+# force kill
+INSTANCE_ID=`ps -ef | grep kafka.Kafka | grep "$KAFKA_HOME" | grep -v grep | awk '{print $2}'`
+
+if [ -n "$INSTANCE_ID" ] ; then
+    kill -9 "$INSTANCE_ID"
+    echo "prev-instance has been killed."
+else
+    echo "prev-instance not found! ignore."
+fi
+
+cd $KAFKA_HOME
+
+
+nohup $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &
+
+echo "kafka-server RUN IN BACKGROUND."
+
+tail -f nohup.out
+
+

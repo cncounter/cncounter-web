@@ -1,0 +1,12 @@
+
+
+if [ ! -n "$1" ] ;then
+    echo "param 'topic' is needed;"
+    exit 1;
+else
+    echo "try to create topic: $1"
+fi
+
+
+bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic $1
+
