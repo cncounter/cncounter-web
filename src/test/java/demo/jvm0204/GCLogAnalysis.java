@@ -15,13 +15,13 @@ public class GCLogAnalysis {
         // 当前毫秒时间戳
         long startMillis = System.currentTimeMillis();
         // 持续运行毫秒数﻿
-        long timeoutMillis = TimeUnit.SECONDS.toMillis(31);
+        long timeoutMillis = TimeUnit.SECONDS.toMillis(10);
         // 结束时间戳
         long endMillis = startMillis + timeoutMillis;
         LongAdder counter = new LongAdder();
         System.out.println("正在执行...");
         // 缓存一部分对象; 进入老年代
-        int cacheSize = 2000;
+        int cacheSize = 2500;
         Object[] cachedGarbage = new Object[cacheSize];
         // 在此时间范围内,持续循环
         while (System.currentTimeMillis() < endMillis) {
