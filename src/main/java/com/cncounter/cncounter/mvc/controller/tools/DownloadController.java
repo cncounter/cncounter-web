@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Map;
 
 /**
@@ -121,6 +122,7 @@ public class DownloadController extends ControllerBase {
             // 暂时不管
             return JSONMessage.failureMessage().setInfo("不支持目录下载");
         }
+        targetfilename = URLDecoder.decode(targetfilename, "UTF-8");
         File targetDirectory = new File(targetDirectoryPath);
         if (!targetDirectory.exists()) {
             targetDirectory.mkdirs();
