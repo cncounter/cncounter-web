@@ -34,7 +34,7 @@
                 targetUrl : href
             };
             // 浏览器不支持!
-            if(!window.navigator || !window.navigator.getUserMedia){
+            if(!window.navigator){
                 result.unSupport = true;
                 return result;
             }
