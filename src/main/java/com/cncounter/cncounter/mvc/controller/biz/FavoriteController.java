@@ -56,6 +56,10 @@ public class FavoriteController extends ControllerBase{
 		//
 		String url = getParameterString(request, "url", "");
 		String title = getParameterString(request, "title", "");
+		// 太短的url
+		if(url.trim().length() <= 2){
+			return JSONMessage.failureMessage();
+		}
 		//
 		Favorite favorite = new Favorite();
 		//
