@@ -15,20 +15,28 @@
 			<p class="h1">二维码在线生成  [<a target="_blank" href="upload.php">在线识别</a>]</p>
 			<div>
 				<form id="input_form" action="<%=basePath %>qrcode/ajax/genqrcode.json" method="post">
-					宽: <input tabindex="1" id="width" name="width" value="300" > px
+					二维码宽度: <input tabindex="1" id="width" name="width" value="300" > px
 					<br/>
-					高: <input tabindex="2" id="height" name="height" value="300" > px
+					二维码高度: <input tabindex="2" id="height" name="height" value="300" > px
 					<br/>
-					<span>请输入需要转换的内容:</span>
+					二维码颜色: <input tabindex="3" id="color" name="color" value="#76c9ee" > px
 					<br/>
-					<textarea tabindex="3" id="content" name="content" rows="4" cols="36"></textarea>
+					<span>请输入需要转为二维码的内容:</span>
+					<br/>
+					<textarea tabindex="4" id="content" name="content" rows="3" cols="36"></textarea>
+					<br/>
+					文字区域高度: <input tabindex="5" id="remark_height" name="remark_height" value="100" > px
+					<br/>
+					<span>请输入配图需要的说明文字（可选）:</span>
+					<br/>
+					<textarea tabindex="6" id="remark" name="remark" rows="4" cols="36"></textarea>
 					<br/>
 				</form>
-                    <button tabindex="4" id="btn_demo_url"
+                    <button tabindex="7" id="btn_demo_url"
                         type="button" class="btn btn-primary"> 示　 例 </button>
-					<button tabindex="4" id="btn_generate_qrcode"
+					<button tabindex="8" id="btn_generate_qrcode"
 						 type="button" class="btn btn-primary"> 生　 成 </button>
-                <a id="btn_redirect"  tabindex="5" style="margin-left: 10px;" class="btn btn-warning"> 点击跳转>> </a>
+                <a id="btn_redirect"  tabindex="9" style="margin-left: 10px;" class="btn btn-warning"> 点击跳转>> </a>
             </div>
 			<div>
 			<br/>
@@ -54,12 +62,19 @@
 			var $qrcode_img_anchor = $("#qrcode_img_anchor");
 			var $input_form = $("#input_form");
 			var $content = $("#content");
+			var $remark = $("#remark");
 			var $width = $("input[name=width]");
 			var $height = $("input[name=height]");
+			var $color = $("input[name=color]");
+			var $remark_height = $("input[name=remark_height]");
 			//
 			$content.bind("focus", function(e){
 				// 选中
 				$content[0] && $content[0].select && $content[0].select();
+			});
+			$remark.bind("focus", function(e){
+				// 选中
+				$remark[0] && $remark[0].select && $remark[0].select();
 			});
             //
             function initContentValue(){
@@ -79,6 +94,9 @@
 				var content = $content.val();
 				var width = $width.val();
 				var height = $height.val();
+				var color = $color.val();
+				var remark = $remark.val();
+				var remark_height = $remark_height.val();
 				if(!content){
 					alert("内容不能为空!");
 					return;
@@ -91,6 +109,9 @@
 					width : width
 					,
 					height : height
+					,color : color
+					,remark : remark
+					,remark_height : remark_height
 				};
 				
 				var successCallback = function (message) {
