@@ -19,11 +19,12 @@
 					<br/>
 					二维码高度: <input tabindex="2" id="height" name="height" value="300" > px
 					<br/>
-					二维码颜色: <input tabindex="3" id="color" name="color" value="#76c9ee" > px
-					<br/>
 					<span>请输入需要转为二维码的内容:</span>
 					<br/>
 					<textarea tabindex="4" id="content" name="content" rows="3" cols="36"></textarea>
+					<br/>
+					<div class="advanced_config hide">
+					二维码颜色: <input tabindex="3" id="color" name="color" value="#76c9ee" >（RGB）
 					<br/>
 					文字区域高度: <input tabindex="5" id="remark_height" name="remark_height" value="100" > px
 					<br/>
@@ -31,9 +32,9 @@
 					<br/>
 					<textarea tabindex="6" id="remark" name="remark" rows="4" cols="36"></textarea>
 					<br/>
+					</div>
 				</form>
-                    <button tabindex="7" id="btn_demo_url"
-                        type="button" class="btn btn-primary"> 示　 例 </button>
+					<input type="checkbox" tabindex="7" id="other_config_switch" class="">高级选项</input>
 					<button tabindex="8" id="btn_generate_qrcode"
 						 type="button" class="btn btn-primary"> 生　 成 </button>
                 <a id="btn_redirect"  tabindex="9" style="margin-left: 10px;" class="btn btn-warning"> 点击跳转>> </a>
@@ -56,7 +57,7 @@
 		$(function(){
 			//
 			var $btn_generate_qrcode = $("#btn_generate_qrcode");
-			var $btn_demo_url = $("#btn_demo_url");
+			var $other_config_switch = $("#other_config_switch");
 			var $btn_redirect = $("#btn_redirect");
 			var $qrcode_img = $("#qrcode_img");
 			var $qrcode_img_anchor = $("#qrcode_img_anchor");
@@ -67,6 +68,7 @@
 			var $height = $("input[name=height]");
 			var $color = $("input[name=color]");
 			var $remark_height = $("input[name=remark_height]");
+			var $advanced_config = $(".advanced_config");
 			//
 			$content.bind("focus", function(e){
 				// 选中
@@ -83,10 +85,14 @@
                 $content.val(href);
             };
             //
-            $btn_demo_url.bind("click", function(e){
-                initContentValue();
+            $other_config_switch.bind("change", function(e){
                 //
-                $btn_generate_qrcode.trigger("click");
+				var checked = $other_config_switch.prop("checked");
+				if(checked){
+					$advanced_config.removeClass("hide");
+				} else {
+					$advanced_config.addClass("hide");
+				}
             });
 			//
 			$btn_generate_qrcode.bind("click", function(e){
@@ -109,10 +115,20 @@
 					width : width
 					,
 					height : height
-					,color : color
-					,remark : remark
-					,remark_height : remark_height
 				};
+
+				var checked = $other_config_switch.prop("checked");
+				if(checked){
+					if(color){
+						data.color = color;
+					}
+					if(remark){
+						data.remark = remark;
+					}
+					if(remark_height){
+						data.remark_height = remark_height;
+					}
+				}
 				
 				var successCallback = function (message) {
 		        	   var meta = message["meta"] || "";
