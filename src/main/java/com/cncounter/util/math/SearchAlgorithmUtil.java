@@ -1,4 +1,4 @@
-package com.cncounter.util.common;
+package com.cncounter.util.math;
 
 import org.springframework.util.StopWatch;
 
@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * 算法工具
  */
-public class AlgoUtil {
+public class SearchAlgorithmUtil {
 
     public static interface IntArraySearch {
         /**
