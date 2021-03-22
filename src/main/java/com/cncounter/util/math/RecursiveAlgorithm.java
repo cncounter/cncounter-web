@@ -2,9 +2,31 @@ package com.cncounter.util.math;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 // 递归算法
 public class RecursiveAlgorithm {
+    // 斐波纳契结果缓存
+    private static Map<Integer, Integer> fibonacciCache
+            = new ConcurrentHashMap<Integer, Integer>();
+
+    // 斐波纳契
+    public static int fibonacci(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        if (n == 1) {
+            return 1;
+        }
+        Integer result = fibonacciCache.get(n);
+        if (null != result) {
+            return result;
+        }
+        result = fibonacci(n - 2) + fibonacci(n - 1);
+        fibonacciCache.put(n, result);
+        return result;
+    }
+
     // 回文
     public static boolean palindrome(String text) {
         int size = text.length();
@@ -35,8 +57,9 @@ public class RecursiveAlgorithm {
     }
 
     public static void main(String[] args) {
-        factorialTest();
-        palindromeTest();
+        //factorialTest();
+        //palindromeTest();
+        fibonacciTest();
     }
 
     private static void factorialTest() {
@@ -64,6 +87,14 @@ public class RecursiveAlgorithm {
                 throw new IllegalStateException("result check fail: text=" + text);
             }
             System.out.println("text=" + text + "; result= " + result);
+        }
+    }
+
+    private static void fibonacciTest() {
+        int max = 46;
+        for (int n = 0; n <= max; n++) {
+            int result = fibonacci(n);
+            System.out.println("fibonacci(" + n + ") = " + result);
         }
     }
 }
