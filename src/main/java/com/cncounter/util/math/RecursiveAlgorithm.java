@@ -12,11 +12,11 @@ public class RecursiveAlgorithm {
 
     // 斐波纳契
     public static int fibonacci(int n) {
-        if (n == 0) {
-            return 0;
+        if (n < 0) {
+            throw new IllegalStateException("must be positive: n=" + n);
         }
-        if (n == 1) {
-            return 1;
+        if (n <= 1) {
+            return n;
         }
         Integer result = fibonacciCache.get(n);
         if (null != result) {
@@ -25,6 +25,7 @@ public class RecursiveAlgorithm {
         result = fibonacci(n - 2) + fibonacci(n - 1);
         fibonacciCache.put(n, result);
         return result;
+        // 后续优化: 动态规划
     }
 
     // 回文
