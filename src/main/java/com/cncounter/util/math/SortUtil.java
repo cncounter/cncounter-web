@@ -105,10 +105,82 @@ public class SortUtil {
         }
     }
 
+    // 分治法: 归并排序
+    public static class MergeSort implements IntArraySort {
+
+        // 是否升序: true=升序; false=降序
+        private boolean asc;
+
+        public MergeSort(boolean asc) {
+            this.asc = asc;
+        }
+
+        /**
+         * 排序
+         *
+         * @param array 数组
+         */
+        @Override
+        public void sort(int[] array) {
+            mergeSort(array, 0, array.length - 1);
+        }
+
+        private void mergeSort(int[] array, int start, int end) {
+            // 只有0-1个元素; 不需要排序;
+            if (start >= end) {
+                return;
+            }
+            // 拆分为2个部分
+            int middle = (start + end) / 2;
+            // 分别进行排序
+            mergeSort(array, start, middle);
+            mergeSort(array, middle + 1, end);
+            // 对结果合并
+            merge(array, start, middle + 1, end);
+        }
+
+        private void merge(final int[] array, final int leftStart, final int rightStart, final int end) {
+            // 使用2个临时数组来辅助
+            int leftLength = rightStart - leftStart;
+            int rightLength = end - rightStart + 1;
+            int[] leftHalf = new int[leftLength];
+            int[] rightHalf = new int[rightLength];
+            // 数组拷贝
+            int cur = leftStart;
+            for (int i = 0; i < leftHalf.length; i++) {
+                leftHalf[i] = array[cur++];
+            }
+            for (int j = 0; j < rightHalf.length; j++) {
+                rightHalf[j] = array[cur++];
+            }
+            // 依次保存到指定位置
+            cur = leftStart;
+            int i = 0;
+            int j = 0;
+            while (i < leftHalf.length && j < rightHalf.length) {
+                int pickupNum;
+                if (asc == leftHalf[i] < rightHalf[j]) {
+                    pickupNum = leftHalf[i++];
+                } else {
+                    pickupNum = rightHalf[j++];
+                }
+                array[cur++] = pickupNum;
+            }
+            // 处理余下的部分
+            while (i < leftHalf.length) {
+                array[cur++] = leftHalf[i++];
+            }
+            while (j < rightHalf.length) {
+                array[cur++] = rightHalf[j++];
+            }
+
+        }
+    }
 
     public static void main(String[] args) {
         testSelectionSort();
         testInsertionSort();
+        testMergeSort();
     }
 
     public static void testSelectionSort() {
@@ -141,6 +213,23 @@ public class SortUtil {
         System.out.println("测试通过:" +
                 insertionSort.getClass().getSimpleName()
                 + "; 耗时ms:" + stopwatch.getTotalTimeMillis());
+    }
+
+    public static void testMergeSort() {
+        // 10w数据量: 66ms; 100w数据量: 500ms
+        StopWatch stopwatch = new StopWatch();
+        stopwatch.start();
+        boolean asc = true;
+        IntArraySort impl = new MergeSort(asc);
+        testIntArraySort(impl, asc);
+        impl = new MergeSort(!asc);
+        testIntArraySort(impl, !asc);
+        //
+        stopwatch.stop();
+        System.out.println("测试通过:" +
+                impl.getClass().getSimpleName()
+                + "; 耗时ms:" + stopwatch.getTotalTimeMillis());
+
     }
 
     public static void testIntArraySort(IntArraySort impl, boolean asc) {
