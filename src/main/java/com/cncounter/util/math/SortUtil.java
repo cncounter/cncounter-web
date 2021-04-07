@@ -177,10 +177,66 @@ public class SortUtil {
         }
     }
 
+    // 分治法: 快排
+    public static class QuickSort implements IntArraySort {
+
+        // 是否升序: true=升序; false=降序
+        private boolean asc;
+        private Random random = new Random();
+
+        public QuickSort(boolean asc) {
+            this.asc = asc;
+        }
+
+        /**
+         * 排序
+         *
+         * @param numArray 数组
+         */
+        @Override
+        public void sort(int[] numArray) {
+            quickSort(numArray, 0, numArray.length - 1);
+        }
+
+        // 快排
+        public void quickSort(int[] numArray, int p, int r) {
+            if (p >= r) {
+                return;
+            }
+            int pivot = partition(numArray, p, r);
+            quickSort(numArray, p, pivot - 1);
+            quickSort(numArray, pivot + 1, r);
+        }
+
+        // 拆分
+        private int partition(int[] numArray, int p, int r) {
+            // 选择随机数作为轴
+            int pIndex = p + random.nextInt(r - p);
+            swap(numArray, pIndex, r);
+            //
+            int q = p;
+            for (int j = p; j < r; j++) {
+                if (asc == (numArray[j] <= numArray[r])) {
+                    swap(numArray, j, q++);
+                }
+            }
+            // 最后交换轴点的值
+            swap(numArray, q, r);
+            return q;
+        }
+
+        private static void swap(int[] numArray, int index1, int index2) {
+            int temp = numArray[index1];
+            numArray[index1] = numArray[index2];
+            numArray[index2] = temp;
+        }
+    }
+
     public static void main(String[] args) {
         testSelectionSort();
         testInsertionSort();
         testMergeSort();
+        testQuickSort();
     }
 
     public static void testSelectionSort() {
@@ -223,6 +279,24 @@ public class SortUtil {
         IntArraySort impl = new MergeSort(asc);
         testIntArraySort(impl, asc);
         impl = new MergeSort(!asc);
+        testIntArraySort(impl, !asc);
+        //
+        stopwatch.stop();
+        System.out.println("测试通过:" +
+                impl.getClass().getSimpleName()
+                + "; 耗时ms:" + stopwatch.getTotalTimeMillis());
+
+    }
+
+
+    public static void testQuickSort() {
+        // 10w数据量: 38ms; 100w数据量: 309ms
+        StopWatch stopwatch = new StopWatch();
+        stopwatch.start();
+        boolean asc = true;
+        IntArraySort impl = new QuickSort(asc);
+        testIntArraySort(impl, asc);
+        impl = new QuickSort(!asc);
         testIntArraySort(impl, !asc);
         //
         stopwatch.stop();
