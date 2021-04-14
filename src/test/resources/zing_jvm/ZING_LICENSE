@@ -1,0 +1,41 @@
+-----BEGIN AZUL SIGNED LICENSE-----
+# Please visit www.azul.com.
+# Email support@azul.com for assistance.
+license.version: 2.0
+product.name: ZingLX
+license.id: 1fe23e70-c315-4c48-9442-1dd35526032d
+license.type: EVAL
+license.customer.class: SSP
+customer.id: 616dd937-3c81-49e1-bb32-1173bff577bb
+customer.name: Azul Engg
+customer.email: 1@a.com
+issuer.name: admin
+reference: 1
+lock.type: TIME
+lock.type: HOST
+azul.host.ipv4: 10.10.120.161
+date.type: DATE
+# Date fields are YYYY-MM-DD HH:mm:SS
+date.timezone: LOCAL
+issued.date: 2020-07-16 12:29:59
+warning.date: 2035-07-01 23:59:59
+expires.date: 2035-07-16 23:59:59
+hardstop.date: 2035-07-31 23:59:59
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/aMt26NM5ugnXceP0PxCS10cgtaM8pT6OGxJ6FzbOO2zaZUu8rEW+fS3xIY0Bqhj4UuSyrP02vC09hvwlKoVtIAC2mfwkNMpkKT2W8LMqS1r+dAy6UXPe6TdvXnVjIhlRGZxsa3pe1F09ZSFSp3D4fmXCVY6AUEVoVk1AwRMcDQIDAQAB
+-----END PUBLIC KEY-----
+-----END AZUL SIGNED LICENSE-----
+-----BEGIN SIGNATURE-----
+QEVT2wsImEIVVyCVi4x8IOVpiZPj4kIrUVhWM708LDQV6nxha3A3hvm++drWsAzpdRJcfZHWMov9a4yluLLjikvl4b4Jeq9i1acrOfHezUTqRMcBABW2NlY7cFNKAu6aZggxO33l97vbvI39Dwr3HJ5GbXEdj60WvdCPuN0hagk=
+-----END SIGNATURE-----
+-----BEGIN SUB LICENSE-----
+# Date fields are YYYY-MM-DD HH:mm:SS
+sublicense.date.timezone: LOCAL
+sublicense.issued.date: 2021-04-08 00:00:02
+sublicense.warning.date: 2021-04-28 23:59:59
+sublicense.expires.date: 2021-05-08 23:59:59
+sublicense.hardstop.date: 2021-05-08 23:59:59
+-----END SUB LICENSE-----
+-----BEGIN SUB LICENSE SIGNATURE-----
+aesJb0JkQH3BntJppY7pqkHjWsOz05JNCjFrVdK7ao29QuqppX7roLecpo+wgi+vsA85438W4V0IgyJQCcKY74MMH/+Vat2+Ecy2cx4MlQnvHYrJeN8oPtuxK1As8TQyycN0k7OcPrTb+M16sVaH0YWMoUwaMm1hAq9Cj+a2YsY=
+-----END SUB LICENSE SIGNATURE-----
