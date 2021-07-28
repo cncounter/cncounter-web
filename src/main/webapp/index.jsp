@@ -6,6 +6,12 @@
 	<title>性能计数器 - CNCounter</title>
     <meta property="qc:admins" content="515131327763637564526375" />
 	<jsp:include page="/common/cssjs.jsp"></jsp:include>
+	<script>
+		;(function(){
+			var CNC_HOSTNAME = "www.cncounter.com";
+			toHttps(CNC_HOSTNAME);
+		})();
+	</script>
 </head>
 <body>
 	<jsp:include page="/common/header.jsp"></jsp:include>
