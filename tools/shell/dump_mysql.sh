@@ -4,9 +4,9 @@
 curtime=`date +%Y%m%d%H%M%S`
 curdate=`date +%Y%m%d`
 backpath=back_$curdate
+basepath=/usr/local/daily_backup_mysql/
 
-mkdir -p $backpath
-
-cat dbnames_to_dump.txt  | xargs -I {} sh -c "mysqldump -u root -proot123  {} > $backpath/{}.dump.sql"
+mkdir -p $basepath/$backpath
+cat $basepath/dbnames_to_dump.txt  | xargs -I {} sh -c "mysqldump -u root -proot  {} > $basepath/$backpath/{}.dump.sql"
 
 
