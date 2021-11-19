@@ -36,7 +36,7 @@
 
         <junit.version>4.11</junit.version>
 
-        <jdk.version>1.6</jdk.version>
+        <jdk.version>8</jdk.version>
 
         <servlet.api.version>2.5</servlet.api.version>
 
