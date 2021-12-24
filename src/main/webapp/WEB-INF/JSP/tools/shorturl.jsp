@@ -52,7 +52,7 @@
         </div>
         <div>
             <p class="h2">短链实现思路:</p>
-            <textarea readonly="readonly">
+            <textarea readonly="readonly" cols="100" rows="3">
 申请短链时，将key和value写入Redis,同时封装并异步发送一个mq消息，返回响应结果。
 访问短链时，先查Redis,没有再查db或者存储，然后封装一个异步mq消息，返回。
 后面的处理，补偿，都基于mq消息异步执行。
