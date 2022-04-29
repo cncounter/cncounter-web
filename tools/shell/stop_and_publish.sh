@@ -28,6 +28,8 @@ git clone -b $srcbranch $srcurl $appname
 # package
 cd $srcpath/$appname 
 git checkout $srcbranch 
+
+git branch --set-upstream-to=origin/$srcbranch $srcbranch
 git pull 
 
 cd $srcpath/$appname 
