@@ -26,7 +26,9 @@
             </span>
         </div>
 
+        <%--
         <div class="cnzz">
             <script src='//s19.cnzz.com/z_stat.php?id=1000461034&web_id=1000461034' type='text/javascript'></script>
         </div>
+        --%>
     </footer>
