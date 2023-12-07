@@ -1,7 +1,5 @@
 package lock;
 
-import com.sun.xml.internal.ws.util.CompletedFuture;
-
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
