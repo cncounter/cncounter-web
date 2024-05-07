@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 跨域请求代理.
  */
-@RequestMapping({"/tools/proxy"})
+@RequestMapping({"/proxy"})
 @Controller
 public class ProxyController extends ControllerBase {
 
@@ -28,6 +28,7 @@ public class ProxyController extends ControllerBase {
         String requestBody = IOUtils.toString(request.getInputStream());
         JSONObject json = (JSONObject) JSONObject.parse(requestBody);
         ProxyRequest proxyRequest = json.toJavaObject(ProxyRequest.class);
+        logger.info("[http1Proxy]收到请求:{}" + json);
         // 1. 代理 get 请求
         String url = proxyRequest.getUrl();
         String method = proxyRequest.getMethod();
