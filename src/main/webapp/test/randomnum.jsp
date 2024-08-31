@@ -22,6 +22,9 @@
         font-size: 16px;
         color: #333;
 	}
+	.logs_area{
+	    font-size: 24px;
+	}
 	</style>
 </head>
 <body>
@@ -29,11 +32,11 @@
 	<div class="container-fluid">
 		<div class="list-group">
 			<button id="btn_generate_random">生成随机数</button><br />
-			<div id="logs"></div>
+			<div id="logs" class="logs_area"></div>
 		</div>
 		<div class="list-group">
 			<button id="btn_generate_random_dlt">大乐透-生成</button><br />
-			<div id="logs_dlt"></div>
+			<div id="logs_dlt" class="logs_area"></div>
 		</div>
 	</div>
 	<jsp:include page="/common/footer.jsp"></jsp:include>
@@ -61,10 +64,10 @@
                     var headNum = 5;
                     var headBase = 35;
                     for(var i=0; i<headNum; i++){
-                        var randomNum = Math.ceil(headBase * Math.random());
+                        var randomNum = randomByBase(headBase);
                         //
                         while(headArray.includes(randomNum)){
-                          randomNum = randomNum = Math.ceil(headBase * Math.random());
+                          randomNum = randomByBase(headBase);
                         }
                         headArray.push(randomNum);
                     }
@@ -75,10 +78,10 @@
                     var tailNum = 2;
                     var tailBase = 12;
                     for(var i=0; i<tailNum; i++){
-                        var randomNum = Math.ceil(tailBase * Math.random());
+                        var randomNum = randomByBase(tailBase);
                         //
                         while(tailArray.includes(randomNum)){
-                          randomNum = randomNum = Math.ceil(tailBase * Math.random());
+                          randomNum = randomByBase(tailBase);
                         }
                         tailArray.push(randomNum);
                     }
@@ -87,7 +90,7 @@
                 //
 				var log = "<br/>";
 				log += "<span class='circle_20_num'>" + (dltTotal++) + "</span>" ;
-				log += "<span style='color:blue;'>" + "1: " ;
+				log += "<span style='color:blue;'>" + "" ;
 				headArray.forEach(function(v, i){
 				        log += format2Digest(v) + "  ";
 				    });
@@ -103,6 +106,16 @@
 				$("#logs_dlt").html(currLog + log);
 			});
 
+            // 重写一个随机数算法
+            function randomByBase(base){
+                var luckyNum = 666;
+                var arc = new Date().getTime() + luckyNum;
+                var temp =Math.abs(Math.sin(arc)) * Math.random() * 10;
+                result = Math.ceil(base * temp);
+                result = Math.ceil(result);
+                result = 1 + result % base;
+                return result;
+            };
 
             // 数字比较
 			function compareFn(num1, num2){
