@@ -247,7 +247,7 @@
             //
             return allHistoryDataList;
 	    };
-	    // loadAllDltHistory(function(list){var dataStr = JSON.stringify(list); copy(dataStr); console.info("执行结束; 整体数据已拷贝到剪贴板!!");})
+	    // loadAllDltHistory()
 
 	    function copyDemo(){
 	      var list = window.allHistoryDataList_;
@@ -255,6 +255,10 @@
 	        // 去掉字段
             v.prizeLevelList = null;
           });
+          var dataStr = JSON.stringify(list);
+          // 这个 copy 不能在函数内部调用, 只能在控制台输入;
+          copy(dataStr);
+          console.info("执行结束; 整体数据已拷贝到剪贴板!!");}
 	    }
 
 
