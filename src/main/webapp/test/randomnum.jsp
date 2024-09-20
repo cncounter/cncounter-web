@@ -8,24 +8,6 @@
 	<jsp:include page="/common/cssjs.jsp"></jsp:include>
 
 	<script type="text/javascript" src="notMultiClick/notMultiClick.js"></script>
-	<style>
-	.circle_20_num {
-	    display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color: #f5f5f5;
-        border: 1px solid #ccc;
-        font-family: Arial;
-        font-size: 16px;
-        color: #333;
-	}
-	.logs_area{
-	    font-size: 24px;
-	}
-	</style>
 </head>
 <body>
 	<jsp:include page="/common/header.jsp"></jsp:include>
@@ -35,8 +17,7 @@
 			<div id="logs" class="logs_area"></div>
 		</div>
 		<div class="list-group">
-			<button id="btn_generate_random_dlt">大乐透-生成</button><br />
-			<div id="logs_dlt" class="logs_area"></div>
+		    <a target="_blank" href="./lottery_dlt.jsp">大乐透-生成</a>
 		</div>
 	</div>
 	<jsp:include page="/common/footer.jsp"></jsp:include>
